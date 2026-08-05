@@ -113,16 +113,6 @@ namespace CarSalesManagementSystemClient.Controllers
                     CookieAuthenticationDefaults.AuthenticationScheme,
                     new ClaimsPrincipal(claimsIdentity));
 
-                // Sync Cart
-                if (!string.IsNullOrEmpty(userId))
-                {
-                    var env = HttpContext.RequestServices.GetService(typeof(Microsoft.AspNetCore.Hosting.IWebHostEnvironment)) as Microsoft.AspNetCore.Hosting.IWebHostEnvironment;
-                    if (env != null)
-                    {
-                        CarSalesManagementSystemClient.Helpers.CartHelper.SyncCartOnLogin(userId, env, HttpContext.Session);
-                    }
-                }
-
                 bool isAdmin = role == "Admin";
                 var redirectUrl = isAdmin ? "/Admin/Cars" : Url.Action("Index", "Home");
                 if (!string.IsNullOrWhiteSpace(returnUrl) && Url.IsLocalUrl(returnUrl))

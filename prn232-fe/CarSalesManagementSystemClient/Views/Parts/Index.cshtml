@@ -1,4 +1,4 @@
-﻿@model CarSalesManagementSystemClient.Models.PagedResultViewModel<CarSalesManagementSystemClient.Models.PartViewModel>
+@model CarSalesManagementSystemClient.Models.PagedResultViewModel<CarSalesManagementSystemClient.Models.PartViewModel>
 
 @{
     ViewData["Title"] = "Cửa hàng Phụ tùng Ô tô";
@@ -1219,10 +1219,14 @@
                                             </a>
                                         </div>
 
-                                        <a href="tel:19001234" class="part-cart-button" style="text-decoration:none; display:flex;">
-                                            <i class="bi bi-telephone-fill"></i>
-                                            Liên hệ ngay
-                                        </a>
+                                        <div style="display: flex; gap: 5px; width: 100%;">
+                                            <a href="https://m.me/inhtoancar" class="part-cart-button" target="_blank" style="text-decoration:none; display:flex; background: #ffffff; color: #000000; border: 1px solid #ddd;">
+                                                <i class="bi bi-chat-dots-fill"></i> Chat
+                                            </a>
+                                            <a href="tel:0359492991" class="part-cart-button" style="text-decoration:none; display:flex; background: #e31837; color: #ffffff; border: 1px solid #e31837;">
+                                                <i class="bi bi-telephone-fill"></i> Gọi
+                                            </a>
+                                        </div>
                                     </div>
                                 </div>
                             </article>
@@ -1304,96 +1308,5 @@
 @section Scripts {
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>
-        function addToCart(partId, maxQty) {
-            var isAuthenticated = @(User.Identity?.IsAuthenticated == true ? "true" : "false");
-            if (!isAuthenticated) {
-                Swal.fire({
-                    title: 'Yêu cầu đăng nhập!',
-                    text: 'Vui lòng đăng nhập để thêm phụ tùng vào giỏ hàng.',
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#ffc107',
-                    cancelButtonColor: '#262626',
-                    confirmButtonText: 'Đăng nhập',
-                    cancelButtonText: 'Hủy'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        var myModal = new bootstrap.Modal(document.getElementById('loginModal'));
-                        myModal.show();
-                    }
-                });
-                return;
-            }
 
-            Swal.fire({
-                title: 'Chọn số lượng',
-                input: 'number',
-                inputAttributes: {
-                    min: 1,
-                    max: maxQty,
-                    step: 1
-                },
-                inputValue: 1,
-                showCancelButton: true,
-                confirmButtonColor: '#ffc107',
-                cancelButtonColor: '#262626',
-                confirmButtonText: 'Xác nhận',
-                cancelButtonText: 'Hủy',
-                inputValidator: (value) => {
-                    if (!value || value <= 0) {
-                        return 'Vui lòng nhập số lượng lớn hơn 0!'
-                    }
-                    if (value > maxQty) {
-                        return 'Số lượng vượt quá tồn kho (Tối đa: ' + maxQty + ')!'
-                    }
-                }
-            }).then((inputResult) => {
-                if (inputResult.isConfirmed) {
-                    var qty = parseInt(inputResult.value);
-                    $.ajax({
-                        url: '@Url.Action("AddToCart", "Cart")',
-                        type: 'POST',
-                        data: { itemType: 'Part', itemId: partId, quantity: qty },
-                        success: function(res) {
-                            if (res.success) {
-                                updateNavbarCartCount(res.cartCount);
-                                Swal.fire({
-                                    title: 'Đã thêm vào giỏ hàng!',
-                                    text: 'Bạn có muốn đi đến giỏ hàng chung để thanh toán?',
-                                    icon: 'success',
-                                    showCancelButton: true,
-                                    confirmButtonColor: '#ffc107',
-                                    cancelButtonColor: '#262626',
-                                    confirmButtonText: 'Đi đến giỏ hàng',
-                                    cancelButtonText: 'Tiếp tục mua sắm'
-                                }).then((navResult) => {
-                                    if (navResult.isConfirmed) {
-                                        window.location.href = '@Url.Action("Index", "Cart")';
-                                    }
-                                });
-                            } else {
-                                Swal.fire('Thất bại!', res.message, 'error');
-                            }
-                        },
-                        error: function() {
-                            Swal.fire('Lỗi!', 'Đã xảy ra lỗi kết nối.', 'error');
-                        }
-                    });
-                }
-            });
-        }
-
-        function updateNavbarCartCount(count) {
-            var badge = $('#navbarCartCount');
-            if (badge.length) {
-                badge.text(count);
-                if (count > 0) {
-                    badge.removeClass('d-none');
-                } else {
-                    badge.addClass('d-none');
-                }
-            }
-        }
-    </script>
 }

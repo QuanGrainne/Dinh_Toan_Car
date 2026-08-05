@@ -139,16 +139,7 @@ namespace CarSalesManagementSystemClient.Models
         public int PageSize { get; set; } = 6;
     }
 
-    public class CartItemViewModel
-    {
-        public int PartId { get; set; }
-        public string PartName { get; set; } = null!;
-        public string PartCode { get; set; } = null!;
-        public decimal Price { get; set; }
-        public int Quantity { get; set; }
-        public int StockQuantity { get; set; }
-        public string? ImageUrl { get; set; }
-    }
+
 
     public class PartOrderDetailViewModel
     {

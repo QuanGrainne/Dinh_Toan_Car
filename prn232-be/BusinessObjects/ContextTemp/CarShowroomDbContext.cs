@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using BusinessObjects.ModelsTemp;
 using Microsoft.EntityFrameworkCore;
@@ -217,6 +217,8 @@ public partial class CarShowroomDbContext : DbContext
             entity.Property(e => e.Description).HasMaxLength(1000);
             entity.Property(e => e.FuelType).HasMaxLength(50);
             entity.Property(e => e.ImageUrl).HasMaxLength(500);
+            entity.Property(e => e.AdditionalImages);
+            entity.Property(e => e.ReviewUrl).HasMaxLength(500);
             entity.Property(e => e.Model).HasMaxLength(100);
             entity.Property(e => e.Price).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.Status)

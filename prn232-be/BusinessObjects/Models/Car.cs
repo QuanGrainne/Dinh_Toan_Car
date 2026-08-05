@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace BusinessObjects.Models;
@@ -28,6 +28,10 @@ public partial class Car
     public string? Description { get; set; }
 
     public string? ImageUrl { get; set; }
+
+    public string? AdditionalImages { get; set; }
+
+    public string? ReviewUrl { get; set; }
 
     public string Status { get; set; } = null!;
 

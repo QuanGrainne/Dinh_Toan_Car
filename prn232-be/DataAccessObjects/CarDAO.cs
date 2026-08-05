@@ -120,7 +120,24 @@ public class CarDAO
     public void UpdateCar(Car car)
     {
         using var context = new CarShowroomContext();
-        context.Entry(car).State = EntityState.Modified;
+        var existing = context.Cars.Find(car.CarId);
+        if (existing == null) return;
+
+        existing.BrandId = car.BrandId;
+        existing.CarName = car.CarName;
+        existing.Model = car.Model;
+        existing.Year = car.Year;
+        existing.Color = car.Color;
+        existing.Mileage = car.Mileage;
+        existing.FuelType = car.FuelType;
+        existing.Transmission = car.Transmission;
+        existing.Price = car.Price;
+        existing.Description = car.Description;
+        existing.ImageUrl = car.ImageUrl;
+        existing.AdditionalImages = car.AdditionalImages;
+        existing.ReviewUrl = car.ReviewUrl;
+        existing.Status = car.Status;
+
         context.SaveChanges();
     }
 

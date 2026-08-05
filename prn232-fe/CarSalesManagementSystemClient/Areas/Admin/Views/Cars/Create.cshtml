@@ -1,7 +1,7 @@
 @model CarSalesManagementSystemClient.Models.CarFormViewModel
 
 @{
-    ViewData["Title"] = "Thêm xe mới";
+    ViewData["Title"] = "ThÃªm xe má»›i";
 
     var brands =
         ViewBag.Brands
@@ -544,13 +544,13 @@
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">
                     <a asp-action="Index">
-                        Quản lý xe
+                        Quáº£n lÃ½ xe
                     </a>
                 </li>
 
                 <li class="breadcrumb-item active"
                     aria-current="page">
-                    Thêm xe mới
+                    ThÃªm xe má»›i
                 </li>
             </ol>
         </nav>
@@ -564,12 +564,12 @@
 
                 <h1 class="car-create-title">
                     <i class="bi bi-car-front-fill"></i>
-                    Thêm xe mới
+                    ThÃªm xe má»›i
                 </h1>
 
                 <p class="car-create-description">
-                    Nhập đầy đủ thông tin cơ bản, thông số vận hành, giá bán
-                    và trạng thái để đưa xe vào hệ thống quản lý showroom.
+                    Nháº­p Ä‘áº§y Ä‘á»§ thÃ´ng tin cÆ¡ báº£n, thÃ´ng sá»‘ váº­n hÃ nh, giÃ¡ bÃ¡n
+                    vÃ  tráº¡ng thÃ¡i Ä‘á»ƒ Ä‘Æ°a xe vÃ o há»‡ thá»‘ng quáº£n lÃ½ showroom.
                 </p>
             </div>
 
@@ -582,16 +582,16 @@
         <section class="car-create-card">
             <div class="car-create-card-header">
                 <div>
-                    <h2>Thông tin xe</h2>
+                    <h2>ThÃ´ng tin xe</h2>
 
                     <p>
-                        Các trường có dấu sao là thông tin bắt buộc trước khi lưu.
+                        CÃ¡c trÆ°á»ng cÃ³ dáº¥u sao lÃ  thÃ´ng tin báº¯t buá»™c trÆ°á»›c khi lÆ°u.
                     </p>
                 </div>
 
                 <span class="car-create-required-note">
                     <i class="bi bi-asterisk"></i>
-                    Trường bắt buộc
+                    TrÆ°á»ng báº¯t buá»™c
                 </span>
             </div>
 
@@ -619,10 +619,10 @@
                             </div>
 
                             <div>
-                                <h3>Thông tin cơ bản</h3>
+                                <h3>ThÃ´ng tin cÆ¡ báº£n</h3>
 
                                 <p>
-                                    Tên xe, thương hiệu, model, năm sản xuất và màu sắc.
+                                    TÃªn xe, thÆ°Æ¡ng hiá»‡u, model, nÄƒm sáº£n xuáº¥t vÃ  mÃ u sáº¯c.
                                 </p>
                             </div>
                         </div>
@@ -631,7 +631,7 @@
                             <div class="col-md-8">
                                 <label asp-for="CarName"
                                        class="car-form-label car-form-label-required">
-                                    Tên xe
+                                    TÃªn xe
                                 </label>
 
                                 <div class="car-input-wrapper">
@@ -647,7 +647,7 @@
                             <div class="col-md-4">
                                 <label asp-for="BrandId"
                                        class="car-form-label car-form-label-required">
-                                    Thương hiệu
+                                    ThÆ°Æ¡ng hiá»‡u
                                 </label>
 
                                 <div class="car-input-wrapper">
@@ -657,7 +657,7 @@
                                             class="car-form-select"
                                             required>
                                         <option value="">
-                                            -- Chọn hãng --
+                                            -- Chá»n hÃ£ng --
                                         </option>
 
                                         @foreach (var b in brands)
@@ -688,7 +688,7 @@
                             <div class="col-md-4">
                                 <label asp-for="Year"
                                        class="car-form-label car-form-label-required">
-                                    Năm sản xuất
+                                    NÄƒm sáº£n xuáº¥t
                                 </label>
 
                                 <div class="car-input-wrapper">
@@ -706,7 +706,7 @@
                             <div class="col-md-4">
                                 <label asp-for="Color"
                                        class="car-form-label">
-                                    Màu sắc
+                                    MÃ u sáº¯c
                                 </label>
 
                                 <div class="car-input-wrapper">
@@ -714,7 +714,7 @@
 
                                     <input asp-for="Color"
                                            class="car-form-control"
-                                           placeholder="VD: Trắng ngọc trai" />
+                                           placeholder="VD: Tráº¯ng ngá»c trai" />
                                 </div>
                             </div>
                         </div>
@@ -728,10 +728,10 @@
                             </div>
 
                             <div>
-                                <h3>Thông số vận hành</h3>
+                                <h3>ThÃ´ng sá»‘ váº­n hÃ nh</h3>
 
                                 <p>
-                                    Loại nhiên liệu, hộp số và số kilomet đã sử dụng.
+                                    Loáº¡i nhiÃªn liá»‡u, há»™p sá»‘ vÃ  sá»‘ kilomet Ä‘Ã£ sá»­ dá»¥ng.
                                 </p>
                             </div>
                         </div>
@@ -740,7 +740,7 @@
                             <div class="col-md-4">
                                 <label asp-for="FuelType"
                                        class="car-form-label car-form-label-required">
-                                    Nhiên liệu
+                                    NhiÃªn liá»‡u
                                 </label>
 
                                 <div class="car-input-wrapper">
@@ -750,15 +750,15 @@
                                             class="car-form-select"
                                             required>
                                         <option value="Gasoline">
-                                            Xăng
+                                            XÄƒng
                                         </option>
 
                                         <option value="Diesel">
-                                            Dầu diesel
+                                            Dáº§u diesel
                                         </option>
 
                                         <option value="Electric">
-                                            Điện
+                                            Äiá»‡n
                                         </option>
 
                                         <option value="Hybrid">
@@ -771,7 +771,7 @@
                             <div class="col-md-4">
                                 <label asp-for="Transmission"
                                        class="car-form-label car-form-label-required">
-                                    Hộp số
+                                    Há»™p sá»‘
                                 </label>
 
                                 <div class="car-input-wrapper">
@@ -781,11 +781,11 @@
                                             class="car-form-select"
                                             required>
                                         <option value="Automatic">
-                                            Tự động
+                                            Tá»± Ä‘á»™ng
                                         </option>
 
                                         <option value="Manual">
-                                            Số sàn
+                                            Sá»‘ sÃ n
                                         </option>
 
                                         <option value="CVT">
@@ -798,7 +798,7 @@
                             <div class="col-md-4">
                                 <label asp-for="Mileage"
                                        class="car-form-label car-form-label-required">
-                                    Số km đã đi
+                                    Sá»‘ km Ä‘Ã£ Ä‘i
                                 </label>
 
                                 <div class="car-input-wrapper">
@@ -822,10 +822,10 @@
                             </div>
 
                             <div>
-                                <h3>Thông tin kinh doanh</h3>
+                                <h3>ThÃ´ng tin kinh doanh</h3>
 
                                 <p>
-                                    Giá bán, trạng thái hiển thị, hình ảnh và mô tả xe.
+                                    GiÃ¡ bÃ¡n, tráº¡ng thÃ¡i hiá»ƒn thá»‹, hÃ¬nh áº£nh vÃ  mÃ´ táº£ xe.
                                 </p>
                             </div>
                         </div>
@@ -834,7 +834,7 @@
                             <div class="col-md-6">
                                 <label asp-for="Price"
                                        class="car-form-label car-form-label-required">
-                                    Giá bán (VNĐ)
+                                    GiÃ¡ bÃ¡n (VNÄ)
                                 </label>
 
                                 <div class="car-input-wrapper">
@@ -849,14 +849,14 @@
                                 </div>
 
                                 <span class="car-form-help">
-                                    Giá được nhập theo đơn vị Việt Nam đồng.
+                                    GiÃ¡ Ä‘Æ°á»£c nháº­p theo Ä‘Æ¡n vá»‹ Viá»‡t Nam Ä‘á»“ng.
                                 </span>
                             </div>
 
                             <div class="col-md-6">
                                 <label asp-for="Status"
                                        class="car-form-label car-form-label-required">
-                                    Trạng thái
+                                    Tráº¡ng thÃ¡i
                                 </label>
 
                                 <div class="car-input-wrapper">
@@ -866,49 +866,80 @@
                                             class="car-form-select"
                                             required>
                                         <option value="Available">
-                                            Có sẵn
+                                            CÃ³ sáºµn
                                         </option>
 
                                         <option value="Reserved">
-                                            Đang đặt cọc
+                                            Äang Ä‘áº·t cá»c
                                         </option>
 
                                         <option value="Sold">
-                                            Đã bán
+                                            ÄÃ£ bÃ¡n
                                         </option>
 
                                         <option value="Inactive">
-                                            Ẩn
+                                            áº¨n
                                         </option>
                                     </select>
                                 </div>
                             </div>
 
                             <div class="col-12">
-                                <label asp-for="ImageUrl"
+                                <label class="car-form-label">
+                                    áº¢nh chÃ­nh (Táº£i lÃªn tá»« mÃ¡y tÃ­nh)
+                                </label>
+                                <div class="car-input-wrapper">
+                                    <i class="bi bi-upload car-input-icon"></i>
+                                    <input type="file" id="mainImageUpload" class="car-form-control" accept="image/*" />
+                                    <input type="hidden" asp-for="ImageUrl" id="hiddenImageUrl" />
+                                </div>
+                                <small id="mainImageStatus" class="text-success" style="display:none;"></small>
+                                <div id="mainImagePreviewContainer" class="mt-2" style="display:none; position:relative;">
+                                    <img id="mainImagePreview" src="" style="max-height: 80px; border-radius: 4px; border: 1px solid #ccc;" />
+                                    <button type="button" class="btn btn-sm btn-danger rounded-circle" style="position:absolute; top:-10px; right:-10px; width:24px; height:24px; padding:0; line-height:1;" onclick="removeMainImage()">
+                                        <i class="bi bi-x"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <label class="car-form-label">
+                                    CÃ¡c áº£nh phá»¥ (Chá»n nhiá»u áº£nh tá»« mÃ¡y tÃ­nh)
+                                </label>
+                                <div class="car-input-wrapper">
+                                    <i class="bi bi-images car-input-icon"></i>
+                                    <input type="file" id="additionalImagesUpload" class="car-form-control" accept="image/*" multiple />
+                                    <input type="hidden" asp-for="AdditionalImages" id="hiddenAdditionalImages" />
+                                </div>
+                                <small id="additionalImagesStatus" class="text-success" style="display:none;"></small>
+                                <div id="additionalImagesPreviewContainer" class="mt-2 d-flex flex-wrap gap-2">
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <label asp-for="ReviewUrl"
                                        class="car-form-label">
-                                    URL ảnh
+                                    Link Review (TikTok/Youtube)
                                 </label>
 
                                 <div class="car-input-wrapper">
-                                    <i class="bi bi-image-fill car-input-icon"></i>
-
-                                    <input asp-for="ImageUrl"
+                                    <i class="bi bi-play-circle-fill car-input-icon"></i>
+                                    <input asp-for="ReviewUrl"
                                            class="car-form-control"
-                                           placeholder="https://..." />
+                                           placeholder="https://www.tiktok.com/..." />
                                 </div>
                             </div>
 
                             <div class="col-12">
                                 <label asp-for="Description"
                                        class="car-form-label">
-                                    Mô tả
+                                    MÃ´ táº£
                                 </label>
 
                                 <textarea asp-for="Description"
                                           class="car-form-textarea"
                                           rows="3"
-                                          placeholder="Mô tả chi tiết về xe..."></textarea>
+                                          placeholder="MÃ´ táº£ chi tiáº¿t vá» xe..."></textarea>
                             </div>
                         </div>
                     </section>
@@ -918,13 +949,13 @@
                         <a asp-action="Index"
                            class="car-create-button car-create-button-cancel">
                             <i class="bi bi-x-lg"></i>
-                            Hủy
+                            Há»§y
                         </a>
 
                         <button type="submit"
                                 class="car-create-button car-create-button-submit">
                             <i class="bi bi-plus-circle-fill"></i>
-                            Thêm xe
+                            ThÃªm xe
                         </button>
                     </div>
                 </form>
@@ -933,3 +964,124 @@
 
     </div>
 </main>
+
+@section Scripts {
+    <script>
+        function removeMainImage() {
+            document.getElementById("hiddenImageUrl").value = "";
+            document.getElementById("mainImagePreviewContainer").style.display = "none";
+            document.getElementById("mainImagePreview").src = "";
+            document.getElementById("mainImageUpload").value = "";
+        }
+
+        function renderAdditionalImages() {
+            var container = document.getElementById("additionalImagesPreviewContainer");
+            container.innerHTML = "";
+            var urlsStr = document.getElementById("hiddenAdditionalImages").value;
+            if (!urlsStr) return;
+            var urls = urlsStr.split(',').map(u => u.trim()).filter(u => u);
+            
+            urls.forEach(function(url, index) {
+                var wrapper = document.createElement("div");
+                wrapper.style.position = "relative";
+                wrapper.style.display = "inline-block";
+                
+                var img = document.createElement("img");
+                img.src = url;
+                img.style.maxHeight = "80px";
+                img.style.borderRadius = "4px";
+                img.style.border = "1px solid #ccc";
+
+                var btn = document.createElement("button");
+                btn.type = "button";
+                btn.className = "btn btn-sm btn-danger rounded-circle";
+                btn.style.position = "absolute";
+                btn.style.top = "-10px";
+                btn.style.right = "-10px";
+                btn.style.width = "24px";
+                btn.style.height = "24px";
+                btn.style.padding = "0";
+                btn.style.lineHeight = "1";
+                btn.innerHTML = '<i class="bi bi-x"></i>';
+                btn.onclick = function() { removeAdditionalImage(index); };
+
+                wrapper.appendChild(img);
+                wrapper.appendChild(btn);
+                container.appendChild(wrapper);
+            });
+        }
+
+        function removeAdditionalImage(index) {
+            var urlsStr = document.getElementById("hiddenAdditionalImages").value;
+            if (!urlsStr) return;
+            var urls = urlsStr.split(',').map(u => u.trim()).filter(u => u);
+            urls.splice(index, 1);
+            document.getElementById("hiddenAdditionalImages").value = urls.join(',');
+            renderAdditionalImages();
+        }
+
+        // Khởi tạo ban đầu
+        renderAdditionalImages();
+
+        document.getElementById("mainImageUpload").addEventListener("change", function () {
+            var files = this.files;
+            if (files.length === 0) return;
+            var formData = new FormData();
+            formData.append("files", files[0]);
+            var statusEl = document.getElementById("mainImageStatus");
+            statusEl.style.display = "block";
+            statusEl.innerText = "Đang tải ảnh...";
+
+            fetch("/Admin/Cars/UploadImages", {
+                method: "POST",
+                body: formData
+            }).then(res => res.json()).then(data => {
+                if (data.success) {
+                    var newUrl = data.imageUrls[0];
+                    document.getElementById("hiddenImageUrl").value = newUrl;
+                    document.getElementById("mainImagePreview").src = newUrl;
+                    document.getElementById("mainImagePreviewContainer").style.display = "inline-block";
+                    statusEl.innerText = "Tải ảnh chính thành công!";
+                } else {
+                    statusEl.innerText = "Lỗi: " + data.message;
+                    statusEl.classList.replace("text-success", "text-danger");
+                }
+            }).catch(err => {
+                statusEl.innerText = "Lỗi kết nối!";
+                statusEl.classList.replace("text-success", "text-danger");
+            });
+        });
+
+        document.getElementById("additionalImagesUpload").addEventListener("change", function () {
+            var files = this.files;
+            if (files.length === 0) return;
+            var formData = new FormData();
+            for (var i = 0; i < files.length; i++) {
+                formData.append("files", files[i]);
+            }
+            var statusEl = document.getElementById("additionalImagesStatus");
+            statusEl.style.display = "block";
+            statusEl.innerText = "Đang tải ảnh...";
+
+            fetch("/Admin/Cars/UploadImages", {
+                method: "POST",
+                body: formData
+            }).then(res => res.json()).then(data => {
+                if (data.success) {
+                    var currentStr = document.getElementById("hiddenAdditionalImages").value;
+                    var currentUrls = currentStr ? currentStr.split(',').map(u => u.trim()).filter(u => u) : [];
+                    var newUrls = currentUrls.concat(data.imageUrls);
+                    document.getElementById("hiddenAdditionalImages").value = newUrls.join(',');
+                    renderAdditionalImages();
+                    statusEl.innerText = "Tải " + data.imageUrls.length + " ảnh phụ thành công!";
+                } else {
+                    statusEl.innerText = "Lỗi: " + data.message;
+                    statusEl.classList.replace("text-success", "text-danger");
+                }
+            }).catch(err => {
+                statusEl.innerText = "Lỗi kết nối!";
+                statusEl.classList.replace("text-success", "text-danger");
+            });
+        });
+    </script>
+}

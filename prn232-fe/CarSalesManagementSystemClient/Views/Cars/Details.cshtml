@@ -930,51 +930,43 @@
         <div class="car-detail-grid">
             <div class="car-detail-column">
                 <section class="car-detail-card car-detail-image-card">
-                    <img src="@displayImageUrl" alt="@Model.CarName" class="car-detail-image">
+                    <img src="@displayImageUrl" alt="@Model.CarName" class="car-detail-image" id="mainCarImage" style="cursor: zoom-in;" onclick="openImageModal(this.src)">
                     <div class="car-detail-image-label">
                         <i class="bi bi-image"></i>
                         Hình ảnh thực tế
                     </div>
                 </section>
-
-                <section class="car-detail-card car-3d-card">
-                    <div class="car-detail-section-heading">
-                        <div class="car-detail-section-title-group">
-                            <div class="car-detail-section-icon">
-                                <i class="bi bi-box-3d"></i>
-                            </div>
-                            <div>
-                                <h2 class="car-detail-section-title">Góc nhìn 3D tương tác</h2>
-                                <p class="car-detail-section-subtitle">Kéo để xoay, cuộn để phóng to hoặc thu nhỏ</p>
-                            </div>
-                        </div>
-
-                        <button id="btnRotateToggle" class="car-rotate-button">
-                            <i class="bi bi-pause-fill"></i>
-                            Tự động xoay
-                        </button>
+                @{
+                    var additionalImagesList = new List<string>();
+                    if (!string.IsNullOrWhiteSpace(Model.AdditionalImages))
+                    {
+                        additionalImagesList = Model.AdditionalImages.Split(new[] { '\r', '\n', ',' }, StringSplitOptions.RemoveEmptyEntries)
+                                                                     .Select(u => u.Trim())
+                                                                     .Where(u => !string.IsNullOrEmpty(u))
+                                                                     .ToList();
+                    }
+                }
+                @if (additionalImagesList.Any())
+                {
+                    <div class="car-detail-thumbnails mt-3" style="display: flex; gap: 10px; overflow-x: auto; padding-bottom: 10px;">
+                        <img src="@displayImageUrl" class="thumbnail-img" style="width: 80px; height: 60px; object-fit: cover; cursor: pointer; border-radius: 8px; border: 2px solid var(--car-detail-accent);" onclick="changeMainImage(this, '@displayImageUrl')" />
+                        @foreach (var img in additionalImagesList)
+                        {
+                            <img src="@img" class="thumbnail-img" style="width: 80px; height: 60px; object-fit: cover; cursor: pointer; border-radius: 8px; border: 2px solid transparent;" onclick="changeMainImage(this, '@img')" />
+                        }
                     </div>
+                    <script>
+                        function changeMainImage(element, newSrc) {
+                            document.getElementById('mainCarImage').src = newSrc;
+                            document.querySelectorAll('.thumbnail-img').forEach(el => {
+                                el.style.borderColor = 'transparent';
+                            });
+                            element.style.borderColor = 'var(--car-detail-accent)';
+                        }
+                    </script>
+                }
 
-                    <div class="canvas-container">
-                        <div id="car3dCanvasContainer"></div>
-                    </div>
 
-                    <div class="car-color-panel">
-                        <div class="car-color-copy">
-                            <strong>Thử màu sơn xe 3D</strong>
-                            <span>Chọn màu để xem trực tiếp trên mô hình</span>
-                        </div>
-
-                        <div class="car-color-list">
-                            <div class="color-swatch active" data-color="blue" style="background-color:#3b82f6;" title="Xanh dương"></div>
-                            <div class="color-swatch" data-color="red" style="background-color:#ef4444;" title="Đỏ"></div>
-                            <div class="color-swatch" data-color="white" style="background-color:#f3f4f6;" title="Trắng"></div>
-                            <div class="color-swatch" data-color="black" style="background-color:#111827;" title="Đen"></div>
-                            <div class="color-swatch" data-color="gray" style="background-color:#6b7280;" title="Xám"></div>
-                            <div class="color-swatch" data-color="yellow" style="background-color:#facc15;" title="Vàng"></div>
-                        </div>
-                    </div>
-                </section>
             </div>
 
             <div class="car-detail-column car-detail-info-column">
@@ -1066,368 +1058,50 @@
                         </div>
                     </div>
 
-                    <a href="tel:19001234"
-                            class="car-add-cart-button" style="text-decoration:none;">
-                        <i class="bi bi-telephone-fill"></i>
-                        <span>Liên hệ ngay</span>
-                    </a>
+                    <div style="display: flex; gap: 10px; width: 100%;">
+                        <a href="https://m.me/inhtoancar"
+                           class="car-add-cart-button" target="_blank" style="text-decoration:none; background: #ffffff; color: #000000; border: 1px solid #ddd; flex: 1;">
+                            <i class="bi bi-chat-dots-fill"></i>
+                            <span>Chat ngay</span>
+                        </a>
+                        <a href="tel:0359492991"
+                           class="car-add-cart-button" style="text-decoration:none; background: #e31837; color: #ffffff; border: 1px solid #e31837; flex: 1;">
+                            <i class="bi bi-telephone-fill"></i>
+                            <span>0359492991</span>
+                        </a>
+                        @if (!string.IsNullOrEmpty(Model.ReviewUrl))
+                        {
+                            <a href="@Model.ReviewUrl" target="_blank"
+                               class="car-add-cart-button" style="text-decoration:none; background: #333333; color: #ffffff; border: 1px solid #333333; flex: 1;">
+                                <i class="bi bi-play-btn"></i>
+                                <span>Review xe</span>
+                            </a>
+                        }
+                    </div>
                 </section>
             </div>
         </div>
     </div>
 </main>
 
+<!-- Image Zoom Modal -->
+<div class="modal fade" id="imageZoomModal" tabindex="-1" aria-labelledby="imageZoomModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content" style="background: transparent; border: none;">
+            <div class="modal-header" style="border: none; position: absolute; right: 0; top: 0; z-index: 1051;">
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close" style="background-color: rgba(0,0,0,0.5); border-radius: 50%; padding: 10px;"></button>
+            </div>
+            <div class="modal-body p-0 text-center">
+                <img id="zoomedImage" src="" alt="Zoomed Image" style="max-width: 100%; max-height: 90vh; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.5);" />
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
-    (function() {
-        const container = document.getElementById('car3dCanvasContainer');
-        if (!container) return;
-
-        container.style.position = 'relative';
-        const debugDiv = document.createElement('div');
-        debugDiv.id = 'debugConsoleLogOverlay';
-        debugDiv.style.position = 'absolute';
-        debugDiv.style.bottom = '10px';
-        debugDiv.style.left = '10px';
-        debugDiv.style.right = '10px';
-        debugDiv.style.maxHeight = '120px';
-        debugDiv.style.overflowY = 'auto';
-        debugDiv.style.background = 'rgba(0,0,0,0.85)';
-        debugDiv.style.color = '#00ff00';
-        debugDiv.style.fontFamily = 'monospace';
-        debugDiv.style.fontSize = '11px';
-        debugDiv.style.padding = '8px';
-        debugDiv.style.borderRadius = '4px';
-        debugDiv.style.zIndex = '9999';
-        debugDiv.style.pointerEvents = 'none';
-        debugDiv.style.display = 'none';
-        debugDiv.innerHTML = '<strong>Console Errors:</strong><br>';
-        container.appendChild(debugDiv);
-
-        window.logToDebug = function(msg, type = 'info') {
-            if (msg.includes('warning X4122') || msg.includes('double precision') || msg.includes('precision')) {
-                return;
-            }
-            if (type === 'error') {
-                debugDiv.style.display = 'block';
-            }
-            const span = document.createElement('span');
-            span.style.color = type === 'error' ? '#ff3333' : (type === 'warn' ? '#ffcc00' : '#00ff00');
-            span.innerText = `[${type.toUpperCase()}] ${msg}`;
-            debugDiv.appendChild(span);
-            debugDiv.appendChild(document.createElement('br'));
-            debugDiv.scrollTop = debugDiv.scrollHeight;
-        };
-
-        const originalLog = console.log;
-        const originalError = console.error;
-        const originalWarn = console.warn;
-
-        console.log = function(...args) {
-            originalLog.apply(console, args);
-            window.logToDebug(args.map(a => typeof a === 'object' ? JSON.stringify(a) : a).join(' '), 'info');
-        };
-        console.error = function(...args) {
-            originalError.apply(console, args);
-            window.logToDebug(args.map(a => typeof a === 'object' ? JSON.stringify(a) : a).join(' '), 'error');
-        };
-        console.warn = function(...args) {
-            originalWarn.apply(console, args);
-            window.logToDebug(args.map(a => typeof a === 'object' ? JSON.stringify(a) : a).join(' '), 'warn');
-        };
-
-        window.addEventListener('error', function(e) {
-            window.logToDebug(`${e.message} at ${e.filename}:${e.lineno}`, 'error');
-        });
-    })();
-</script>
-
-@Html.Raw("<script type=\"importmap\">{\n  \"imports\": {\n    \"three\": \"https://cdn.jsdelivr.net/npm/three@latest/build/three.module.js\",\n    \"three/addons/\": \"https://cdn.jsdelivr.net/npm/three@latest/examples/jsm/\"\n  }\n}</script>")
-
-<script type="module">
-    import * as THREE from 'three';
-    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-    import { USDLoader } from 'three/addons/loaders/USDLoader.js';
-    import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
-
-    const container = document.getElementById('car3dCanvasContainer');
-    const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x1e293b);
-
-    const gridHelper = new THREE.GridHelper(30, 30, 0x475569, 0x334155);
-    gridHelper.position.y = -1.2;
-    scene.add(gridHelper);
-
-    const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 100);
-    camera.position.set(6, 3, 8);
-
-    const renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.setSize(container.clientWidth, container.clientHeight);
-    renderer.setPixelRatio(window.devicePixelRatio);
-    renderer.shadowMap.enabled = true;
-    renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.3;
-    container.appendChild(renderer.domElement);
-
-    const pmremGenerator = new THREE.PMREMGenerator(renderer);
-    scene.environment = pmremGenerator.fromScene(new RoomEnvironment(renderer), 0.04).texture;
-
-    const controls = new OrbitControls(camera, renderer.domElement);
-    controls.enableDamping = true;
-    controls.dampingFactor = 0.05;
-    controls.minDistance = 3;
-    controls.maxDistance = 15;
-    controls.maxPolarAngle = Math.PI / 2 - 0.05;
-
-    const ambientLight = new THREE.AmbientLight(0xffffff, 1.2);
-    scene.add(ambientLight);
-
-    const dirLight = new THREE.DirectionalLight(0xffffff, 2.0);
-    dirLight.position.set(10, 20, 10);
-    scene.add(dirLight);
-
-    const light2 = new THREE.DirectionalLight(0x38bdf8, 1.2);
-    light2.position.set(-10, 5, -10);
-    scene.add(light2);
-
-    const frontLight = new THREE.DirectionalLight(0xffffff, 1.5);
-    frontLight.position.set(0, 5, 15);
-    scene.add(frontLight);
-
-    const paintColorMap = {
-        'blue': 0x1e3a5f,
-        'red': 0x8b0000,
-        'white': 0xe8e8e8,
-        'black': 0x141414,
-        'gray': 0x5a6472,
-        'yellow': 0xc8960c
-    };
-
-    let initialColorHex = paintColorMap['white'];
-    const dbColor = "@(Model.Color?.ToLower() ?? "blue")";
-    if (dbColor.includes('red') || dbColor.includes('đỏ')) initialColorHex = paintColorMap['red'];
-    else if (dbColor.includes('white') || dbColor.includes('trắng')) initialColorHex = paintColorMap['white'];
-    else if (dbColor.includes('black') || dbColor.includes('den')) initialColorHex = paintColorMap['black'];
-    else if (dbColor.includes('gray') || dbColor.includes('xám') || dbColor.includes('ghi')) initialColorHex = paintColorMap['gray'];
-    else if (dbColor.includes('yellow') || dbColor.includes('vàng')) initialColorHex = paintColorMap['yellow'];
-
-    document.querySelectorAll('.color-swatch').forEach(swatch => {
-        const colorName = swatch.getAttribute('data-color');
-        if (paintColorMap[colorName] === initialColorHex) {
-            document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
-            swatch.classList.add('active');
-        }
-    });
-
-    const paintMaterials = [];
-
-    const loadingEl = document.createElement('div');
-    loadingEl.style.position = 'absolute';
-    loadingEl.style.top = '50%';
-    loadingEl.style.left = '50%';
-    loadingEl.style.transform = 'translate(-50%, -50%)';
-    loadingEl.style.color = '#fff';
-    loadingEl.style.fontFamily = 'sans-serif';
-    loadingEl.style.fontWeight = 'bold';
-    loadingEl.style.fontSize = '14px';
-    loadingEl.innerHTML = '<div class="spinner-border text-warning me-2" role="status" style="width: 1.5rem; height: 1.5rem; vertical-align: middle;"></div> Đang tải mô hình 3D...';
-    container.style.position = 'relative';
-    container.appendChild(loadingEl);
-
-    const loader = new USDLoader();
-    let carModel = null;
-    let autoRotate = true;
-
-    loader.load(
-        '/2020_Aston_Martin_DBS_GT_Zagato__www.vecarz.usdz',
-        (usdz) => {
-            if (loadingEl.parentNode) {
-                loadingEl.parentNode.removeChild(loadingEl);
-            }
-
-            carModel = usdz;
-
-            //
-            //sarpaint
-            //dbody, door, hood, bumper, mirror_c
-            const BODY_MESH_KW = ['dbody', 'door', 'hood', 'bumper', 'mirror_c'];
-            const PAINT_MAT_KW = ['sarpaint', 'paint', 'carpaint', 'car_paint', 'body_paint'];
-
-            const isBodyPanel = (matName, meshName) =>
-                PAINT_MAT_KW.some(k => matName.includes(k)) ||
-                BODY_MESH_KW.some(k => meshName.includes(k));
-
-            carModel.traverse((child) => {
-                if (child.isMesh) {
-                    child.castShadow = true;
-                    child.receiveShadow = true;
-
-                    if (child.material) {
-                        const mats = Array.isArray(child.material) ? child.material : [child.material];
-                        mats.forEach(mat => {
-                            const matName = (mat.name || '').toLowerCase();
-                            const meshName = (child.name || '').toLowerCase();
-
-                            if (isBodyPanel(matName, meshName)) {
-                                mat.roughness = 0.18;
-                                mat.metalness = 0.85;
-                                mat.userData.originalMap = mat.map || null;
-                                paintMaterials.push(mat);
-                            }
-                        });
-                    }
-                }
-            });
-
-            console.log('[3D] Body paint materials detected:', paintMaterials.length);
-
-            paintMaterials.forEach(mat => {
-                mat.map = null;
-                mat.color.setHex(initialColorHex);
-                mat.needsUpdate = true;
-            });
-
-            carModel.scale.set(1.5, 1.5, 1.5);
-            carModel.position.set(0, -0.6, 0);
-
-            const box = new THREE.Box3().setFromObject(carModel);
-            const center = box.getCenter(new THREE.Vector3());
-            carModel.position.x += (carModel.position.x - center.x);
-            carModel.position.z += (carModel.position.z - center.z);
-            carModel.position.y += (-1.2 - box.min.y);
-
-            let logText = "";
-            carModel.traverse(child => {
-                if (child.isMesh && child.material) {
-                    const mats = Array.isArray(child.material) ? child.material : [child.material];
-                    mats.forEach(mat => {
-                        logText += `Mesh: ${child.name} | Mat: ${mat.name} | Color: ${mat.color.getHexString()} | Metal: ${mat.metalness} | Rough: ${mat.roughness} | Map: ${mat.map ? 'yes' : 'no'}\n`;
-                    });
-                }
-            });
-            const diagEl = document.createElement('pre');
-            diagEl.id = 'debugMaterialsList';
-            diagEl.style.display = 'none';
-            diagEl.innerText = logText;
-            document.body.appendChild(diagEl);
-
-            scene.add(carModel);
-        },
-        undefined,
-        (error) => {
-            console.error('USD Loader Error:', error);
-            loadingEl.innerHTML = '<span class="text-danger"><i class="bi bi-exclamation-triangle-fill me-1"></i> Không thể tải mô hình 3D.</span>';
-        }
-    );
-
-    function animate() {
-        requestAnimationFrame(animate);
-        if (autoRotate && carModel) {
-            carModel.rotation.y += 0.004;
-        }
-        controls.update();
-        renderer.render(scene, camera);
+    function openImageModal(src) {
+        document.getElementById('zoomedImage').src = src;
+        var myModal = new bootstrap.Modal(document.getElementById('imageZoomModal'));
+        myModal.show();
     }
-    animate();
-
-    window.addEventListener('resize', () => {
-        camera.aspect = container.clientWidth / container.clientHeight;
-        camera.updateProjectionMatrix();
-        renderer.setSize(container.clientWidth, container.clientHeight);
-    });
-
-    document.querySelectorAll('.color-swatch').forEach(swatch => {
-        swatch.addEventListener('click', () => {
-            document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
-            swatch.classList.add('active');
-            const colorName = swatch.getAttribute('data-color');
-            if (paintColorMap[colorName] !== undefined) {
-                const targetColor = paintColorMap[colorName];
-
-                paintMaterials.forEach(mat => {
-                    mat.map = null;
-                    mat.color.setHex(targetColor);
-                    mat.roughness = 0.22;
-                    mat.metalness = 0.8;
-                    mat.needsUpdate = true;
-                });
-            }
-        });
-    });
-
-    const rotateBtn = document.getElementById('btnRotateToggle');
-    rotateBtn.addEventListener('click', () => {
-        autoRotate = !autoRotate;
-        if (autoRotate) {
-            rotateBtn.innerHTML = '<i class="bi bi-pause-fill me-1"></i> Tự động xoay';
-            rotateBtn.className = "car-rotate-button";
-        } else {
-            rotateBtn.innerHTML = '<i class="bi bi-arrow-repeat me-1"></i> Tự động xoay';
-            rotateBtn.className = "car-rotate-button";
-        }
-    });
-
-    // ===== Thêm xe vào giỏ hàng chung (captcha dùng chung theo hóa đơn master) =====
-    const isAuthenticatedCar = @(User.Identity?.IsAuthenticated == true ? "true" : "false");
-    const btnAddCarToCart = document.getElementById('btnAddCarToCart');
-    btnAddCarToCart?.addEventListener('click', async () => {
-        if (!isAuthenticatedCar) {
-            if (window.Swal) {
-                const r = await window.Swal.fire({
-                    title: 'Yêu cầu đăng nhập!',
-                    text: 'Vui lòng đăng nhập để thêm xe vào giỏ hàng.',
-                    icon: 'warning', showCancelButton: true,
-                    confirmButtonColor: '#ffc107', cancelButtonColor: '#262626',
-                    confirmButtonText: 'Đăng nhập', cancelButtonText: 'Hủy'
-                });
-                if (r.isConfirmed) window.location.href = '/Auth/Login?returnUrl=' + encodeURIComponent(window.location.pathname);
-            } else if (confirm('Vui lòng đăng nhập để thêm xe vào giỏ hàng. Đi đến trang đăng nhập?')) {
-                window.location.href = '/Auth/Login';
-            }
-            return;
-        }
-
-        const carId = parseInt(btnAddCarToCart.dataset.carid);
-        const original = btnAddCarToCart.innerHTML;
-        btnAddCarToCart.disabled = true;
-        btnAddCarToCart.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Đang thêm...';
-
-        try {
-            const body = new URLSearchParams({ itemType: 'Car', itemId: String(carId), quantity: '1' });
-            const resp = await fetch('/Cart/AddToCart', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: body.toString()
-            });
-            const res = await resp.json();
-            btnAddCarToCart.disabled = false;
-            btnAddCarToCart.innerHTML = original;
-
-            if (res.success) {
-                const badge = document.getElementById('navbarCartCount');
-                if (badge && res.cartCount !== undefined) badge.textContent = res.cartCount;
-
-                if (window.Swal) {
-                    const r = await window.Swal.fire({
-                        title: 'Đã thêm xe vào giỏ hàng!',
-                        text: 'Bạn có muốn đến giỏ hàng để tiến hành thủ tục?',
-                        icon: 'success', showCancelButton: true,
-                        confirmButtonColor: '#ffc107', cancelButtonColor: '#262626',
-                        confirmButtonText: 'Đến giỏ hàng', cancelButtonText: 'Tiếp tục xem xe'
-                    });
-                    if (r.isConfirmed) window.location.href = '/Cart';
-                } else if (confirm('Đã thêm xe vào giỏ hàng. Đến giỏ hàng ngay?')) {
-                    window.location.href = '/Cart';
-                }
-            } else {
-                if (window.Swal) window.Swal.fire('Không thể thêm', res.message || 'Xe không khả dụng.', 'error');
-                else alert(res.message || 'Không thể thêm xe vào giỏ hàng.');
-            }
-        } catch (err) {
-            btnAddCarToCart.disabled = false;
-            btnAddCarToCart.innerHTML = original;
-            if (window.Swal) window.Swal.fire('Lỗi!', 'Đã xảy ra lỗi kết nối.', 'error');
-            else alert('Đã xảy ra lỗi kết nối.');
-        }
-    });
-
 </script>

@@ -151,45 +151,7 @@
                     font-weight: 900;
                 }
 
-            .site-cart-link {
-                position: relative;
-                width: 31px;
-                height: 31px;
-                display: inline-flex;
-                align-items: center;
-                justify-content: center;
-                color: #ffffff;
-                background-color: rgba(255, 255, 255, 0.055);
-                border: 1px solid rgba(255, 255, 255, 0.075);
-                border-radius: 9px;
-                text-decoration: none;
-                transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
-            }
 
-                .site-cart-link:hover {
-                    color: var(--layout-primary);
-                    background-color: var(--layout-accent);
-                    border-color: var(--layout-accent);
-                }
-
-            #navbarCartCount {
-                position: absolute;
-                top: -6px;
-                right: -7px;
-                min-width: 18px;
-                height: 18px;
-                display: inline-flex;
-                align-items: center;
-                justify-content: center;
-                padding: 2px 5px;
-                color: #ffffff;
-                background-color: var(--layout-danger);
-                border: 2px solid #0c0e12;
-                border-radius: 999px;
-                font-size: 0.52rem;
-                font-weight: 900;
-                line-height: 1;
-            }
 
             /* =========================
                                    MAIN HEADER
@@ -450,22 +412,28 @@
                 }
 
             .floating-contact-zalo {
-                color: var(--layout-primary);
+                color: #000000 !important;
                 background-color: var(--layout-accent);
             }
 
                 .floating-contact-zalo:hover {
-                    color: var(--layout-primary);
+                    color: #000000 !important;
                 }
 
             .floating-contact-facebook {
                 background-color: #1877f2;
+                color: #ffffff !important;
             }
 
             .floating-contact-hotline {
                 background-color: #dc3545;
+                color: #ffffff !important;
             }
 
+            .floating-contact-tiktok {
+                background-color: #000000;
+                color: #ffffff !important;
+            }
             /* =========================
                                    FOOTER
                                 ========================== */
@@ -978,7 +946,7 @@
                 }
 
                 .site-topbar-link,
-                .site-cart-link,
+
                 .site-nav-link,
                 .floating-contact,
                 .site-footer-link {
@@ -1275,10 +1243,16 @@
             <span>Chat Zalo</span>
         </a>
 
-        <a href="#"
+        <a href="https://www.facebook.com/inhtoancar" target="_blank"
            class="floating-contact floating-contact-facebook">
             <i class="bi bi-facebook"></i>
             <span>Chat Facebook</span>
+        </a>
+
+        <a href="https://www.tiktok.com/@@otocutaihan" target="_blank"
+           class="floating-contact floating-contact-tiktok">
+            <i class="bi bi-tiktok"></i>
+            <span>Review xe tiktok</span>
         </a>
 
         <a href="tel:0359492991"
@@ -1327,21 +1301,21 @@
                     </p>
 
                     <div class="site-social-list">
-                        <span class="site-social-button">
+                        <a href="https://www.facebook.com/inhtoancar" target="_blank" class="site-social-button">
                             <i class="bi bi-facebook"></i>
-                        </span>
+                        </a>
 
-                        <span class="site-social-button">
+                        <a href="https://www.tiktok.com/@@otocutaihan" target="_blank" class="site-social-button">
                             <i class="bi bi-tiktok"></i>
-                        </span>
+                        </a>
 
-                        <span class="site-social-button">
+                        <a href="mailto:dinhnhatquan0311@gmail.com" class="site-social-button">
                             <i class="bi bi-envelope-fill"></i>
-                        </span>
+                        </a>
 
-                        <span class="site-social-button">
+                        <a href="tel:0359492991" class="site-social-button">
                             <i class="bi bi-telephone-fill"></i>
-                        </span>
+                        </a>
                     </div>
                 </div>
 
@@ -1442,7 +1416,7 @@
 
                 <div class="modal-body site-auth-modal-body">
                     <p class="site-auth-description">
-                        Đăng nhập để quản lý giỏ hàng, đơn hàng và lịch hẹn
+                        Đăng nhập để quản lý đơn hàng và lịch hẹn
                         bảo dưỡng của bạn.
                     </p>
 
@@ -1759,7 +1733,7 @@
                 }
             });
     </script>
-    <script src="~/js/chatbot.js" asp-append-version="true"></script>
+
     <script src="~/js/car-purchase-flow.js" asp-append-version="true"></script>
 
     @if (TempData["SuccessMessage"] != null)

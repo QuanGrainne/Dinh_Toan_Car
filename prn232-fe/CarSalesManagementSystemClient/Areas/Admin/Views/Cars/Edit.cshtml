@@ -888,17 +888,48 @@
                             </div>
 
                             <div class="col-12">
-                                <label asp-for="ImageUrl"
+                                <label class="car-edit-label">
+                                    Ảnh chính (Tải lên từ máy tính)
+                                </label>
+                                <div class="car-edit-input-wrapper">
+                                    <i class="bi bi-upload car-edit-input-icon"></i>
+                                    <input type="file" id="mainImageUpload" class="car-edit-control" accept="image/*" />
+                                    <input type="hidden" asp-for="ImageUrl" id="hiddenImageUrl" />
+                                </div>
+                                <small id="mainImageStatus" class="text-success" style="display:none;"></small>
+                                <div id="mainImagePreviewContainer" class="mt-2" style="@(string.IsNullOrEmpty(Model.ImageUrl) ? "display:none;" : "") position:relative; display:inline-block;">
+                                    <img id="mainImagePreview" src="@Model.ImageUrl" style="max-height: 80px; border-radius: 4px; border: 1px solid #ccc;" />
+                                    <button type="button" class="btn btn-sm btn-danger rounded-circle" style="position:absolute; top:-10px; right:-10px; width:24px; height:24px; padding:0; line-height:1;" onclick="removeMainImage()">
+                                        <i class="bi bi-x"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <label class="car-edit-label">
+                                    Các ảnh phụ (Chọn nhiều ảnh từ máy tính)
+                                </label>
+                                <div class="car-edit-input-wrapper">
+                                    <i class="bi bi-images car-edit-input-icon"></i>
+                                    <input type="file" id="additionalImagesUpload" class="car-edit-control" accept="image/*" multiple />
+                                    <input type="hidden" asp-for="AdditionalImages" id="hiddenAdditionalImages" />
+                                </div>
+                                <small id="additionalImagesStatus" class="text-success" style="display:none;"></small>
+                                <div id="additionalImagesPreviewContainer" class="mt-2 d-flex flex-wrap gap-2">
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <label asp-for="ReviewUrl"
                                        class="car-edit-label">
-                                    URL ảnh
+                                    Link Review (TikTok/Youtube)
                                 </label>
 
                                 <div class="car-edit-input-wrapper">
-                                    <i class="bi bi-image-fill car-edit-input-icon"></i>
-
-                                    <input asp-for="ImageUrl"
+                                    <i class="bi bi-play-circle-fill car-edit-input-icon"></i>
+                                    <input asp-for="ReviewUrl"
                                            class="car-edit-control"
-                                           placeholder="https://..." />
+                                           placeholder="https://www.tiktok.com/..." />
                                 </div>
                             </div>
 
@@ -935,3 +966,124 @@
 
     </div>
 </main>
+
+@section Scripts {
+    <script>
+        function removeMainImage() {
+            document.getElementById("hiddenImageUrl").value = "";
+            document.getElementById("mainImagePreviewContainer").style.display = "none";
+            document.getElementById("mainImagePreview").src = "";
+            document.getElementById("mainImageUpload").value = "";
+        }
+
+        function renderAdditionalImages() {
+            var container = document.getElementById("additionalImagesPreviewContainer");
+            container.innerHTML = "";
+            var urlsStr = document.getElementById("hiddenAdditionalImages").value;
+            if (!urlsStr) return;
+            var urls = urlsStr.split(',').map(u => u.trim()).filter(u => u);
+            
+            urls.forEach(function(url, index) {
+                var wrapper = document.createElement("div");
+                wrapper.style.position = "relative";
+                wrapper.style.display = "inline-block";
+                
+                var img = document.createElement("img");
+                img.src = url;
+                img.style.maxHeight = "80px";
+                img.style.borderRadius = "4px";
+                img.style.border = "1px solid #ccc";
+
+                var btn = document.createElement("button");
+                btn.type = "button";
+                btn.className = "btn btn-sm btn-danger rounded-circle";
+                btn.style.position = "absolute";
+                btn.style.top = "-10px";
+                btn.style.right = "-10px";
+                btn.style.width = "24px";
+                btn.style.height = "24px";
+                btn.style.padding = "0";
+                btn.style.lineHeight = "1";
+                btn.innerHTML = '<i class="bi bi-x"></i>';
+                btn.onclick = function() { removeAdditionalImage(index); };
+
+                wrapper.appendChild(img);
+                wrapper.appendChild(btn);
+                container.appendChild(wrapper);
+            });
+        }
+
+        function removeAdditionalImage(index) {
+            var urlsStr = document.getElementById("hiddenAdditionalImages").value;
+            if (!urlsStr) return;
+            var urls = urlsStr.split(',').map(u => u.trim()).filter(u => u);
+            urls.splice(index, 1);
+            document.getElementById("hiddenAdditionalImages").value = urls.join(',');
+            renderAdditionalImages();
+        }
+
+        // Khởi tạo ban đầu
+        renderAdditionalImages();
+
+        document.getElementById("mainImageUpload").addEventListener("change", function () {
+            var files = this.files;
+            if (files.length === 0) return;
+            var formData = new FormData();
+            formData.append("files", files[0]);
+            var statusEl = document.getElementById("mainImageStatus");
+            statusEl.style.display = "block";
+            statusEl.innerText = "Đang tải ảnh...";
+
+            fetch("/Admin/Cars/UploadImages", {
+                method: "POST",
+                body: formData
+            }).then(res => res.json()).then(data => {
+                if (data.success) {
+                    var newUrl = data.imageUrls[0];
+                    document.getElementById("hiddenImageUrl").value = newUrl;
+                    document.getElementById("mainImagePreview").src = newUrl;
+                    document.getElementById("mainImagePreviewContainer").style.display = "inline-block";
+                    statusEl.innerText = "Tải ảnh chính thành công!";
+                } else {
+                    statusEl.innerText = "Lỗi: " + data.message;
+                    statusEl.classList.replace("text-success", "text-danger");
+                }
+            }).catch(err => {
+                statusEl.innerText = "Lỗi kết nối!";
+                statusEl.classList.replace("text-success", "text-danger");
+            });
+        });
+
+        document.getElementById("additionalImagesUpload").addEventListener("change", function () {
+            var files = this.files;
+            if (files.length === 0) return;
+            var formData = new FormData();
+            for (var i = 0; i < files.length; i++) {
+                formData.append("files", files[i]);
+            }
+            var statusEl = document.getElementById("additionalImagesStatus");
+            statusEl.style.display = "block";
+            statusEl.innerText = "Đang tải ảnh...";
+
+            fetch("/Admin/Cars/UploadImages", {
+                method: "POST",
+                body: formData
+            }).then(res => res.json()).then(data => {
+                if (data.success) {
+                    var currentStr = document.getElementById("hiddenAdditionalImages").value;
+                    var currentUrls = currentStr ? currentStr.split(',').map(u => u.trim()).filter(u => u) : [];
+                    var newUrls = currentUrls.concat(data.imageUrls);
+                    document.getElementById("hiddenAdditionalImages").value = newUrls.join(',');
+                    renderAdditionalImages();
+                    statusEl.innerText = "Tải " + data.imageUrls.length + " ảnh phụ thành công!";
+                } else {
+                    statusEl.innerText = "Lỗi: " + data.message;
+                    statusEl.classList.replace("text-success", "text-danger");
+                }
+            }).catch(err => {
+                statusEl.innerText = "Lỗi kết nối!";
+                statusEl.classList.replace("text-success", "text-danger");
+            });
+        });
+    </script>
+}

@@ -25,6 +25,8 @@ public class CarViewModel
     public decimal Price { get; set; }
     public string? Description { get; set; }
     public string? ImageUrl { get; set; }
+    public string? AdditionalImages { get; set; }
+    public string? ReviewUrl { get; set; }
     public string Status { get; set; } = null!;
     public DateTime CreatedAt { get; set; }
     public CarBrandViewModel Brand { get; set; } = null!;
@@ -98,6 +100,8 @@ public class CarFormViewModel
     public decimal Price { get; set; }
     public string? Description { get; set; }
     public string? ImageUrl { get; set; }
+    public string? AdditionalImages { get; set; }
+    public string? ReviewUrl { get; set; }
     public string Status { get; set; } = "Available";
 }
 

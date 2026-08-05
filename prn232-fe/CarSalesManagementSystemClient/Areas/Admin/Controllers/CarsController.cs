@@ -131,6 +131,8 @@ namespace CarSalesManagementSystemClient.Areas.Admin.Controllers
                     Price = car.Price,
                     Description = car.Description,
                     ImageUrl = car.ImageUrl,
+                    AdditionalImages = car.AdditionalImages,
+                    ReviewUrl = car.ReviewUrl,
                     Status = car.Status
                 });
             }
@@ -171,7 +173,8 @@ namespace CarSalesManagementSystemClient.Areas.Admin.Controllers
                     return RedirectToAction(nameof(Index));
                 }
 
-                TempData["ErrorMessage"] = "Cap nhat that bai: " + await ReadApiErrorAsync(response, requestUri);
+                var responseContent = await response.Content.ReadAsStringAsync();
+                TempData["ErrorMessage"] = $"Cap nhat that bai [{(int)response.StatusCode}]: {responseContent}";
             }
             catch (Exception ex)
             {
@@ -229,6 +232,8 @@ namespace CarSalesManagementSystemClient.Areas.Admin.Controllers
                 Price = form.Price,
                 Description = form.Description,
                 ImageUrl = form.ImageUrl,
+                AdditionalImages = form.AdditionalImages,
+                ReviewUrl = form.ReviewUrl,
                 Status = form.Status,
                 CreatedAt = DateTime.Now
             };
@@ -244,6 +249,40 @@ namespace CarSalesManagementSystemClient.Areas.Admin.Controllers
             catch
             {
                 ViewBag.Brands = new List<CarBrandViewModel>();
+            }
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        [IgnoreAntiforgeryToken]
+        public async Task<IActionResult> UploadImages(List<IFormFile> files)
+        {
+            if (files == null || !files.Any())
+                return Json(new { success = false, message = "Vui lòng chọn ít nhất 1 tập tin ảnh." });
+
+            try
+            {
+                var uploadsFolder = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", "cars");
+                if (!Directory.Exists(uploadsFolder))
+                    Directory.CreateDirectory(uploadsFolder);
+
+                var imageUrls = new List<string>();
+                foreach (var file in files)
+                {
+                    if (file != null && file.Length > 0)
+                    {
+                        var fileName = Guid.NewGuid().ToString("N") + System.IO.Path.GetExtension(file.FileName);
+                        var filePath = System.IO.Path.Combine(uploadsFolder, fileName);
+                        using var stream = new System.IO.FileStream(filePath, System.IO.FileMode.Create);
+                        await file.CopyToAsync(stream);
+                        imageUrls.Add("/uploads/cars/" + fileName);
+                    }
+                }
+                return Json(new { success = true, imageUrls = imageUrls, joinedUrl = string.Join(",", imageUrls) });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "Lỗi khi tải ảnh: " + ex.Message });
             }
         }
     }
