@@ -6,7 +6,7 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0" />
 
-    <title>@ViewData["Title"] - Group7</title>
+    <title>@ViewData["Title"] - Đinh Toản Car Korea</title>
 
     <link rel="stylesheet"
           href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
@@ -995,18 +995,6 @@
 
 <body>
     @{
-        var cartJson = Context.Session.GetString("UnifiedCartSession");
-        int cartCount = 0;
-
-        if (!string.IsNullOrEmpty(cartJson))
-        {
-            var unifiedCart =
-                System.Text.Json.JsonSerializer.Deserialize<CarSalesManagementSystemClient.Models.UnifiedCart>(cartJson);
-
-            cartCount =
-                unifiedCart?.Items?.Sum(x => x.Quantity) ?? 0;
-        }
-
         var ctrl =
             ViewContext.RouteData.Values["Controller"]?.ToString();
 
@@ -1019,21 +1007,10 @@
         <div class="container site-topbar-inner">
             <div class="site-welcome">
                 Chào mừng bạn tới
-                <strong>Group7 ECO DRIVE</strong>
+                <strong>Đinh Toản Car Korea</strong>
             </div>
 
             <div class="site-account-menu">
-                <a asp-controller="Cart"
-                   asp-action="Index"
-                   class="site-cart-link"
-                   aria-label="Giỏ hàng">
-                    <i class="bi bi-cart3"></i>
-
-                    <span id="navbarCartCount"
-                          class="@(cartCount > 0 ? "" : "d-none")">
-                        @cartCount
-                    </span>
-                </a>
 
                 @if (User.Identity?.IsAuthenticated == true)
                 {
@@ -1096,11 +1073,11 @@
 
                     <span class="site-brand-copy">
                         <span class="site-brand-name">
-                            Group<span>7</span>
+                            Đinh Toản Car Korea
                         </span>
 
                         <span class="site-brand-subtitle">
-                            ECO DRIVE
+                            Hệ thống ô tô Hàn Quốc
                         </span>
                     </span>
                 </a>
@@ -1283,45 +1260,7 @@
                             </a>
                         </li>
 
-                        @if (User.Identity?.IsAuthenticated == true && !User.IsInRole("Admin"))
-                        {
-                            <li class="nav-item site-nav-item @(ctrl == "Invoices" ? "active" : "")">
-                                <a class="nav-link site-nav-link"
-                                   asp-controller="Invoices"
-                                   asp-action="Index">
-                                    Hóa đơn của tôi
-                                </a>
-                            </li>
-                        }
 
-                        @if (User.IsInRole("Admin"))
-                        {
-                            <li class="nav-item site-nav-item @(ctrl == "Cars" && act == "History" ? "active" : "")">
-                                <a class="nav-link site-nav-link"
-                                   asp-controller="Cars"
-                                   asp-action="History">
-                                    Lịch sử mua/cọc
-                                </a>
-                            </li>
-
-                            <li class="nav-item site-nav-item">
-                                <a class="nav-link site-nav-link"
-                                   asp-area="Admin"
-                                   asp-controller="Cars"
-                                   asp-action="Index">
-                                    Quản lý xe
-                                </a>
-                            </li>
-
-                            <li class="nav-item site-nav-item">
-                                <a class="nav-link site-nav-link"
-                                   asp-area="Admin"
-                                   asp-controller="Captchas"
-                                   asp-action="Index">
-                                    Hóa đơn & Captcha
-                                </a>
-                            </li>
-                        }
                     </ul>
                 </div>
             </div>
@@ -1372,17 +1311,17 @@
 
                         <span>
                             <span class="site-footer-brand-name">
-                                Group<span>7</span>
+                                Đinh Toản Car Korea
                             </span>
 
                             <span class="site-footer-brand-subtitle">
-                                ECO DRIVE
+                                Hệ thống ô tô Hàn Quốc
                             </span>
                         </span>
                     </a>
 
                     <p class="site-footer-description">
-                        Group7 Auto được thành lập với niềm đam mê và khát vọng
+                        Đinh Toản Car Korea Auto được thành lập với niềm đam mê và khát vọng
                         mang đến những mẫu xe chất lượng, dịch vụ minh bạch và
                         trải nghiệm mua xe đáng tin cậy cho khách hàng.
                     </p>
@@ -1465,15 +1404,15 @@
                                 allowfullscreen=""
                                 loading="lazy"
                                 referrerpolicy="no-referrer-when-downgrade"
-                                title="Bản đồ Group7">
+                                title="Bản đồ Đinh Toản Car Korea">
                         </iframe>
                     </div>
                 </div>
             </div>
 
             <div class="site-footer-bottom">
-                Copyright &copy; 2026 ECO DRIVE Group7.
-                All rights reserved. Web Design by Group7
+                Copyright &copy; 2026 Đinh Toản Car Korea.
+                All rights reserved. Web Design by Đinh Toản Car Korea
             </div>
         </div>
     </footer>
@@ -1616,7 +1555,7 @@
                 <div class="modal-body site-auth-modal-body">
                     <p class="site-auth-description">
                         Tạo tài khoản để theo dõi đơn hàng, hóa đơn và sử dụng
-                        các dịch vụ của Group7.
+                        các dịch vụ của Đinh Toản Car Korea.
                     </p>
 
                     <div id="registerError"

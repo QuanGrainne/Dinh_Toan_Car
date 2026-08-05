@@ -1,4 +1,4 @@
-@model CarSalesManagementSystemClient.Models.PagedResultViewModel<CarSalesManagementSystemClient.Models.PartViewModel>
+﻿@model CarSalesManagementSystemClient.Models.PagedResultViewModel<CarSalesManagementSystemClient.Models.PartViewModel>
 
 @{
     ViewData["Title"] = "Cửa hàng Phụ tùng Ô tô";
@@ -890,7 +890,7 @@
         <header class="parts-store-header">
             <div class="parts-store-header-content">
                 <div class="parts-store-eyebrow">
-                    Group7 ECO DRIVE
+                    Đinh Toản Car Korea
                 </div>
 
                 <h1 class="parts-store-title">
@@ -1219,24 +1219,10 @@
                                             </a>
                                         </div>
 
-                                        @if (part.Quantity > 0)
-                                        {
-                                            <button type="button"
-                                                    class="part-cart-button"
-                                                    onclick="addToCart(@part.PartId, @part.Quantity)">
-                                                <i class="bi bi-cart-plus-fill"></i>
-                                                Thêm vào giỏ hàng
-                                            </button>
-                                        }
-                                        else
-                                        {
-                                            <button type="button"
-                                                    class="part-cart-button"
-                                                    disabled>
-                                                <i class="bi bi-x-circle"></i>
-                                                Hết hàng
-                                            </button>
-                                        }
+                                        <a href="tel:19001234" class="part-cart-button" style="text-decoration:none; display:flex;">
+                                            <i class="bi bi-telephone-fill"></i>
+                                            Liên hệ ngay
+                                        </a>
                                     </div>
                                 </div>
                             </article>

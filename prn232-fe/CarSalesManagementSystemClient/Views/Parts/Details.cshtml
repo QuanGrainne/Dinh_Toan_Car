@@ -1241,52 +1241,11 @@
 
                     @if (isAvailable)
                     {
-                        <div class="cart-actions">
-                            <div class="qty-selector">
-                                <button type="button"
-                                        class="qty-btn"
-                                        id="qtyMinus"
-                                        onclick="changeQty(-1)"
-                                        aria-label="Giảm số lượng">
-                                    <i class="bi bi-dash-lg"></i>
-                                </button>
-
-                                <input type="number"
-                                       id="qtyInput"
-                                       class="qty-input"
-                                       value="1"
-                                       min="1"
-                                       max="@Model.Quantity"
-                                       readonly />
-
-                                <button type="button"
-                                        class="qty-btn"
-                                        id="qtyPlus"
-                                        onclick="changeQty(1)"
-                                        aria-label="Tăng số lượng">
-                                    <i class="bi bi-plus-lg"></i>
-                                </button>
-                            </div>
-
-                            <button type="button"
-                                    class="btn-add-cart"
-                                    id="btnAddToCart"
-                                    onclick="addToCartDetail(@Model.PartId, @Model.Quantity)">
-                                <i class="bi bi-cart-plus-fill"></i>
-                                Thêm vào giỏ hàng
-                            </button>
-                        </div>
-
-                    }
-                    else
-                    {
                         <div class="mb-4">
-                            <button type="button"
-                                    class="btn-add-cart disabled-btn w-100"
-                                    disabled>
-                                <i class="bi bi-x-circle"></i>
-                                Sản phẩm không có sẵn
-                            </button>
+                            <a href="tel:19001234" class="btn-add-cart w-100" style="text-decoration:none; display:flex; justify-content:center; align-items:center;">
+                                <i class="bi bi-telephone-fill me-2"></i>
+                                Liên hệ ngay
+                            </a>
                         </div>
                     }
 
