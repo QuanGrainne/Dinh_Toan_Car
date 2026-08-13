@@ -18,7 +18,6 @@ namespace CarSalesManagementSystemClient.Controllers
         private readonly string _apiBaseUrl;
         private string BrandsApiUrl => $"{_apiBaseUrl}/odata/CarBrands";
         private string CarsApiUrl => $"{_apiBaseUrl}/odata/Cars";
-        private string PurchaseRequestsApiUrl => $"{_apiBaseUrl}/odata/PurchaseRequests";
 
         public CarsController(IHttpClientFactory httpClientFactory, IConfiguration configuration)
         {
@@ -144,75 +143,6 @@ namespace CarSalesManagementSystemClient.Controllers
             {
                 _httpClient.DefaultRequestHeaders.Authorization =
                     new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
-            }
-        }
-
-        // GET: Cars/History
-        [HttpGet]
-        public async Task<IActionResult> History()
-        {
-            if (!User.Identity.IsAuthenticated)
-            {
-                return RedirectToAction("Login", "Auth");
-            }
-
-            try
-            {
-                AttachJwtToken();
-                var requestUri = $"{_apiBaseUrl}/api/car-sales/requests";
-                var response = await _httpClient.GetAsync(requestUri);
-                if (response.IsSuccessStatusCode)
-                {
-                    var content = await response.Content.ReadAsStringAsync();
-                    var options = new System.Text.Json.JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-                    var historyList = System.Text.Json.JsonSerializer.Deserialize<List<PurchaseRequestHistoryViewModel>>(content, options) ?? new List<PurchaseRequestHistoryViewModel>();
-                    return View(historyList);
-                }
-                return View(new List<PurchaseRequestHistoryViewModel>());
-            }
-            catch (Exception ex)
-            {
-                TempData["ErrorMessage"] = "Có lỗi xảy ra khi tải lịch sử: " + ex.Message;
-                return View(new List<PurchaseRequestHistoryViewModel>());
-            }
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> SubmitPurchaseRequest(string endpoint, [FromBody] System.Text.Json.JsonElement payload)
-        {
-            try
-            {
-                AttachJwtToken();
-                var requestUri = $"{_apiBaseUrl}/api/car-sales/requests";
-                
-                int carId = payload.TryGetProperty("carId", out var carProp) ? carProp.GetInt32() : 0;
-                string name = User.Identity?.Name ?? "Khách hàng";
-                string phone = payload.TryGetProperty("customerPhone", out var phoneProp) ? phoneProp.GetString() ?? "0900000000" : "0900000000";
-                string email = payload.TryGetProperty("customerEmail", out var emailProp) ? emailProp.GetString() ?? "" : "";
-                string message = payload.TryGetProperty("message", out var msgProp) ? msgProp.GetString() ?? endpoint : endpoint;
-
-                var dto = new
-                {
-                    CarId = carId,
-                    CustomerName = name,
-                    CustomerPhone = phone,
-                    CustomerEmail = email,
-                    Message = message
-                };
-
-                var response = await _httpClient.PostAsJsonAsync(requestUri, dto);
-                var content = await response.Content.ReadAsStringAsync();
-                
-                return new ContentResult
-                {
-                    Content = content,
-                    ContentType = response.Content.Headers.ContentType?.ToString() ?? "application/json",
-                    StatusCode = (int)response.StatusCode
-                };
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { success = false, message = "Lỗi kết nối máy chủ: " + ex.Message });
             }
         }
 

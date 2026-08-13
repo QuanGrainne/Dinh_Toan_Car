@@ -48,8 +48,7 @@ namespace Services
 
         public bool HasTransactions(int partId)
         {
-            using var context = new DataAccessObjects.CarShowroomContext();
-            return context.InventoryTransactions.Any(x => x.PartId == partId);
+            return false;
         }
 
         public void UpdatePartMetadata(BusinessObjects.ViewModels.UpdatePartViewModel model, int? adminId)
@@ -76,34 +75,12 @@ namespace Services
                 throw new InvalidOperationException("Danh mục phụ tùng không tồn tại.");
             }
 
-            if (model.MinStockLevel < 0)
-            {
-                throw new InvalidOperationException("Mức cảnh báo tối thiểu không được âm.");
-            }
-            if (model.MaxStockLevel <= 0)
-            {
-                throw new InvalidOperationException("Sức chứa tối đa phải lớn hơn 0.");
-            }
-            if (model.MinStockLevel > model.MaxStockLevel)
-            {
-                throw new InvalidOperationException("Mức cảnh báo tối thiểu không được lớn hơn sức chứa tối đa.");
-            }
-
             if (model.Price < 0)
             {
                 throw new InvalidOperationException("Giá bán không được âm.");
             }
-            if (model.WarrantyMonths < 0)
-            {
-                throw new InvalidOperationException("Số tháng bảo hành không được âm.");
-            }
 
-            if (string.IsNullOrWhiteSpace(model.UnitOfMeasure))
-            {
-                throw new InvalidOperationException("Đơn vị tính không được để trống.");
-            }
-
-            bool hasTx = context.InventoryTransactions.Any(x => x.PartId == model.PartId);
+            bool hasTx = false;
             if (!hasTx && !string.IsNullOrWhiteSpace(model.PartCode))
             {
                 var code = model.PartCode.Trim().ToUpperInvariant();
@@ -114,32 +91,13 @@ namespace Services
                 part.PartCode = code;
             }
 
-            if (model.Status == "Available")
-            {
-                if (part.Quantity == 0)
-                {
-                    throw new InvalidOperationException("Không thể chọn Còn hàng (Available) khi số lượng tồn kho bằng 0.");
-                }
-                part.Status = "Available";
-            }
-            else if (model.Status == "Inactive")
-            {
-                part.Status = "Inactive";
-            }
-            else if (model.Status == "OutOfStock")
-            {
-                part.Status = part.Quantity > 0 ? "Available" : "OutOfStock";
-            }
+            // Simple status: Available or Inactive only
+            part.Status = model.Status == "Inactive" ? "Inactive" : "Available";
 
             part.PartName = name;
             part.CategoryId = model.CategoryId;
             part.Brand = string.IsNullOrWhiteSpace(model.Brand) ? null : model.Brand.Trim();
             part.Price = model.Price;
-            part.MinStockLevel = model.MinStockLevel;
-            part.MaxStockLevel = model.MaxStockLevel;
-            part.UnitOfMeasure = model.UnitOfMeasure.Trim();
-            part.WarehouseLocation = string.IsNullOrWhiteSpace(model.WarehouseLocation) ? null : model.WarehouseLocation.Trim();
-            part.WarrantyMonths = model.WarrantyMonths;
             part.Description = string.IsNullOrWhiteSpace(model.Description) ? null : model.Description.Trim();
             part.ImageUrl = string.IsNullOrWhiteSpace(model.ImageUrl) ? null : model.ImageUrl.Trim();
             part.UpdatedAt = DateTime.Now;
@@ -187,10 +145,6 @@ namespace Services
             {
                 throw new InvalidOperationException("Không tìm thấy phụ tùng cần xóa.");
             }
-            if (part.Quantity > 0)
-            {
-                throw new InvalidOperationException("Không thể xóa phụ tùng đang có số lượng lớn hơn 0.");
-            }
             try
             {
                 _repository.DeletePart(partId);
@@ -201,7 +155,7 @@ namespace Services
             }
         }
 
-        public IEnumerable<Part> GetPartsFiltered(int categoryId, int supplierId) => _repository.GetPartsFiltered(categoryId, supplierId);
+        public IEnumerable<Part> GetPartsFiltered(int categoryId) => _repository.GetPartsFiltered(categoryId);
     }
 }
 

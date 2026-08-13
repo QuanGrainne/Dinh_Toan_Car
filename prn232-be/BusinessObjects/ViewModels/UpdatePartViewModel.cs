@@ -25,22 +25,6 @@ namespace BusinessObjects.ViewModels
         [Range(0, 1000000000, ErrorMessage = "Giá bán không được âm.")]
         public decimal Price { get; set; }
 
-        [Range(0, 100000, ErrorMessage = "Mức cảnh báo tối thiểu không được âm.")]
-        public int MinStockLevel { get; set; } = 5;
-
-        [Range(1, 100000, ErrorMessage = "Sức chứa tối đa phải lớn hơn 0.")]
-        public int MaxStockLevel { get; set; } = 100;
-
-        [Required(ErrorMessage = "Đơn vị tính không được để trống.")]
-        [StringLength(50, ErrorMessage = "Đơn vị tính không vượt quá 50 ký tự.")]
-        public string UnitOfMeasure { get; set; } = "Cái";
-
-        [StringLength(100, ErrorMessage = "Vị trí kho không vượt quá 100 ký tự.")]
-        public string? WarehouseLocation { get; set; }
-
-        [Range(0, 1000, ErrorMessage = "Số tháng bảo hành không được âm.")]
-        public int WarrantyMonths { get; set; }
-
         [StringLength(1000, ErrorMessage = "Mô tả không vượt quá 1000 ký tự.")]
         public string? Description { get; set; }
 
@@ -49,9 +33,6 @@ namespace BusinessObjects.ViewModels
 
         public string Status { get; set; } = "Available";
 
-        // Read-only display context fields
-        public int CurrentQuantity { get; set; }
-        public DateTime? CurrentExpiredAt { get; set; }
         public bool CanEditPartCode { get; set; } = true;
     }
 

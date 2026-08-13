@@ -62,7 +62,6 @@ namespace CarSalesManagementSystemAPI.Controllers
             try
             {
                 ModelState.Remove(nameof(Car.Brand));
-                ModelState.Remove(nameof(Car.PurchaseRequests));
                 if (!ModelState.IsValid || car == null)
                 {
                     return BadRequest(ModelState);
@@ -84,7 +83,6 @@ namespace CarSalesManagementSystemAPI.Controllers
             try
             {
                 ModelState.Remove(nameof(Car.Brand));
-                ModelState.Remove(nameof(Car.PurchaseRequests));
                 if (!ModelState.IsValid || car == null)
                 {
                     return BadRequest(ModelState);

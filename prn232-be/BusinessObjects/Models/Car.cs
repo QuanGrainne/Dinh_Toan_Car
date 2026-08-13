@@ -38,6 +38,4 @@ public partial class Car
     public DateTime CreatedAt { get; set; }
 
     public virtual CarBrand Brand { get; set; } = null!;
-
-    public virtual ICollection<PurchaseRequest> PurchaseRequests { get; set; } = new List<PurchaseRequest>();
 }

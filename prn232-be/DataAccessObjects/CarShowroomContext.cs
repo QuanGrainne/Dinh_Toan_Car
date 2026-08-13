@@ -28,49 +28,15 @@ public partial class CarShowroomContext : DbContext
 
     public virtual DbSet<CarBrand> CarBrands { get; set; }
 
-    public virtual DbSet<MaintenanceAppointment> MaintenanceAppointments { get; set; }
-
     public virtual DbSet<MaintenancePackage> MaintenancePackages { get; set; }
 
     public virtual DbSet<Service> Services { get; set; }
 
     public virtual DbSet<PackageService> PackageServices { get; set; }
 
-    public virtual DbSet<CustomerCar> CustomerCars { get; set; }
-
-    public virtual DbSet<AppointmentDetail> AppointmentDetails { get; set; }
-
-    public virtual DbSet<AppointmentConsumedPart> AppointmentConsumedParts { get; set; }
-
-    public virtual DbSet<ServiceRequiredPart> ServiceRequiredParts { get; set; }
-
     public virtual DbSet<Part> Parts { get; set; }
 
     public virtual DbSet<PartCategory> PartCategories { get; set; }
-
-    public virtual DbSet<PartOrder> PartOrders { get; set; }
-
-    public virtual DbSet<PartOrderDetail> PartOrderDetails { get; set; }
-
-    public virtual DbSet<PurchaseRequest> PurchaseRequests { get; set; }
-
-    public virtual DbSet<Supplier> Suppliers { get; set; }
-
-    public virtual DbSet<PartCompatibility> PartCompatibilities { get; set; }
-
-    public virtual DbSet<InventoryReceipt> InventoryReceipts { get; set; }
-
-    public virtual DbSet<InventoryReceiptDetail> InventoryReceiptDetails { get; set; }
-
-    public virtual DbSet<InventoryTransaction> InventoryTransactions { get; set; }
-
-    public virtual DbSet<MasterInvoice> MasterInvoices { get; set; }
-
-    public virtual DbSet<PartInvoice> PartInvoices { get; set; }
-
-    public virtual DbSet<ServiceInvoice> ServiceInvoices { get; set; }
-
-    public virtual DbSet<CarInvoice> CarInvoices { get; set; }
 
     public override int SaveChanges()
     {
@@ -321,33 +287,6 @@ public partial class CarShowroomContext : DbContext
             );
         });
 
-        modelBuilder.Entity<MaintenanceAppointment>(entity =>
-        {
-            entity.HasKey(e => e.AppointmentId);
-
-            entity.Property(e => e.CreatedAt)
-                .HasDefaultValueSql("(getdate())")
-                .HasColumnType("datetime");
-            entity.Property(e => e.UpdatedAt).HasColumnType("datetime");
-            entity.Property(e => e.ExpiredAt).HasColumnType("datetime");
-            entity.Property(e => e.CustomerEmail).HasMaxLength(100);
-            entity.Property(e => e.CustomerName).HasMaxLength(100);
-            entity.Property(e => e.CustomerPhone).HasMaxLength(20);
-            entity.Property(e => e.Note).HasMaxLength(1000);
-            entity.Property(e => e.Status)
-                .HasMaxLength(50)
-                .HasDefaultValue("Pending");
-
-            entity.HasOne(d => d.Customer).WithMany(p => p.MaintenanceAppointments)
-                .HasForeignKey(d => d.CustomerId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_MaintenanceAppointments_AppUsers");
-
-            entity.HasOne(d => d.CustomerCar).WithMany(p => p.MaintenanceAppointments)
-                .HasForeignKey(d => d.CustomerCarId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_MaintenanceAppointments_CustomerCars");
-        });
 
         modelBuilder.Entity<MaintenancePackage>(entity =>
         {
@@ -437,114 +376,7 @@ public partial class CarShowroomContext : DbContext
             );
         });
 
-        modelBuilder.Entity<CustomerCar>(entity =>
-        {
-            entity.HasKey(e => e.CustomerCarId);
 
-            entity.HasIndex(e => e.LicensePlate).IsUnique();
-            entity.HasIndex(e => e.VIN).IsUnique();
-
-            entity.Property(e => e.Model).HasMaxLength(100);
-            entity.Property(e => e.VIN).HasMaxLength(50);
-            entity.Property(e => e.LicensePlate).HasMaxLength(30);
-            entity.Property(e => e.Color).HasMaxLength(50);
-            entity.Property(e => e.ExpiredAt).HasColumnType("datetime");
-            entity.Property(e => e.CreatedAt)
-                .HasDefaultValueSql("(getdate())")
-                .HasColumnType("datetime");
-            entity.Property(e => e.UpdatedAt).HasColumnType("datetime");
-
-            entity.HasOne(d => d.Customer).WithMany(p => p.CustomerCars)
-                .HasForeignKey(d => d.CustomerId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_CustomerCars_AppUsers");
-
-            entity.HasOne(d => d.Brand).WithMany()
-                .HasForeignKey(d => d.BrandId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_CustomerCars_CarBrands");
-        });
-
-        modelBuilder.Entity<AppointmentDetail>(entity =>
-        {
-            entity.HasKey(e => e.AppointmentDetailId);
-
-            entity.Property(e => e.UnitPrice).HasColumnType("decimal(18, 2)");
-            entity.Property(e => e.Quantity).HasDefaultValue(1);
-            entity.Property(e => e.CreatedAt)
-                .HasDefaultValueSql("(getdate())")
-                .HasColumnType("datetime");
-
-            entity.HasOne(d => d.Appointment).WithMany(p => p.AppointmentDetails)
-                .HasForeignKey(d => d.AppointmentId)
-                .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("FK_AppointmentDetails_Appointments");
-
-            entity.HasOne(d => d.Package).WithMany(p => p.AppointmentDetails)
-                .HasForeignKey(d => d.PackageId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_AppointmentDetails_Packages");
-
-            entity.HasOne(d => d.Service).WithMany(p => p.AppointmentDetails)
-                .HasForeignKey(d => d.ServiceId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_AppointmentDetails_Services");
-        });
-
-        modelBuilder.Entity<AppointmentConsumedPart>(entity =>
-        {
-            entity.HasKey(e => e.ConsumedPartId);
-
-            entity.Property(e => e.UnitPrice).HasColumnType("decimal(18, 2)");
-            entity.Property(e => e.IsIncurred).HasDefaultValue(false);
-            entity.Property(e => e.ApprovedByCustomer).HasDefaultValue(true);
-            entity.Property(e => e.Notes).HasMaxLength(500);
-            entity.Property(e => e.CreatedAt)
-                .HasDefaultValueSql("(getdate())")
-                .HasColumnType("datetime");
-            entity.Property(e => e.UpdatedAt).HasColumnType("datetime");
-
-            entity.HasOne(d => d.Appointment).WithMany(p => p.ConsumedParts)
-                .HasForeignKey(d => d.AppointmentId)
-                .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("FK_AppointmentConsumedParts_Appointments");
-
-            entity.HasOne(d => d.AppointmentDetail).WithMany(p => p.ConsumedParts)
-                .HasForeignKey(d => d.AppointmentDetailId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_AppointmentConsumedParts_Details");
-
-            entity.HasOne(d => d.Part).WithMany(p => p.AppointmentConsumedParts)
-                .HasForeignKey(d => d.PartId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_AppointmentConsumedParts_Parts");
-        });
-
-
-
-        modelBuilder.Entity<ServiceRequiredPart>(entity =>
-        {
-            entity.HasKey(e => new { e.ServiceId, e.PartId });
-
-            entity.Property(e => e.QuantityRequired).HasDefaultValue(1);
-            entity.Property(e => e.CreatedAt)
-                .HasDefaultValueSql("(getdate())")
-                .HasColumnType("datetime");
-
-            entity.HasOne(d => d.Service).WithMany(p => p.ServiceRequiredParts)
-                .HasForeignKey(d => d.ServiceId)
-                .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("FK_ServiceRequiredParts_Services");
-
-            entity.HasOne(d => d.Part).WithMany(p => p.ServiceRequiredParts)
-                .HasForeignKey(d => d.PartId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_ServiceRequiredParts_Parts");
-
-            entity.HasData(
-                new ServiceRequiredPart { ServiceId = 1, PartId = 3, QuantityRequired = 4, CreatedAt = new DateTime(2025, 1, 1) }
-            );
-        });
 
         modelBuilder.Entity<Part>(entity =>
         {
@@ -668,79 +500,6 @@ public partial class CarShowroomContext : DbContext
             );
         });
 
-        modelBuilder.Entity<PartOrder>(entity =>
-        {
-            entity.HasKey(e => e.OrderId).HasName("PK__PartOrde__C3905BCF6A12AD11");
-
-            entity.Property(e => e.CreatedAt)
-                .HasDefaultValueSql("(getdate())")
-                .HasColumnType("datetime");
-            entity.Property(e => e.CustomerEmail).HasMaxLength(100);
-            entity.Property(e => e.CustomerName).HasMaxLength(100);
-            entity.Property(e => e.CustomerPhone).HasMaxLength(20);
-            entity.Property(e => e.ShippingAddress).HasMaxLength(255).IsRequired(false);
-            entity.Property(e => e.DeliveryMethod).HasMaxLength(50).HasDefaultValue("Pickup");
-            entity.Property(e => e.ShippingFee).HasColumnType("decimal(18, 2)").HasDefaultValue(0);
-            entity.Property(e => e.Status)
-                .HasMaxLength(50)
-                .HasDefaultValue("Pending");
-            entity.Property(e => e.TotalAmount).HasColumnType("decimal(18, 2)");
-            entity.Property(e => e.UpdatedAt).HasColumnType("datetime");
-
-            entity.HasOne(d => d.Customer).WithMany(p => p.PartOrders)
-                .HasForeignKey(d => d.CustomerId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_PartOrders_AppUsers");
-        });
-
-        modelBuilder.Entity<PartOrderDetail>(entity =>
-        {
-            entity.HasKey(e => e.OrderDetailId).HasName("PK__PartOrde__D3B9D36CC532A696");
-
-            entity.Property(e => e.SubTotal).HasColumnType("decimal(18, 2)").ValueGeneratedOnAddOrUpdate();
-            entity.Property(e => e.UnitPrice).HasColumnType("decimal(18, 2)");
-
-            entity.HasOne(d => d.Order).WithMany(p => p.PartOrderDetails)
-                .HasForeignKey(d => d.OrderId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_PartOrderDetails_PartOrders");
-
-            entity.HasOne(d => d.Part).WithMany(p => p.PartOrderDetails)
-                .HasForeignKey(d => d.PartId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_PartOrderDetails_Parts");
-        });
-
-        modelBuilder.Entity<PurchaseRequest>(entity =>
-        {
-            entity.HasKey(e => e.RequestId).HasName("PK__Purchase__33A8517AB622A517");
-
-            entity.Property(e => e.CreatedAt)
-                .HasDefaultValueSql("(getdate())")
-                .HasColumnType("datetime");
-            entity.Property(e => e.CustomerEmail).HasMaxLength(100);
-            entity.Property(e => e.CustomerName).HasMaxLength(100);
-            entity.Property(e => e.CustomerPhone).HasMaxLength(20);
-            entity.Property(e => e.Message).HasMaxLength(1000);
-            entity.Property(e => e.Status)
-                .HasMaxLength(50)
-                .HasDefaultValue("Pending");
-            entity.Property(e => e.UpdatedAt).HasColumnType("datetime");
-            entity.Property(e => e.ExpiredAt).HasColumnType("datetime");
-
-            entity.HasOne(d => d.Car).WithMany(p => p.PurchaseRequests)
-                .HasForeignKey(d => d.CarId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_PurchaseRequests_Cars");
-
-            entity.HasOne(d => d.Customer).WithMany(p => p.PurchaseRequests)
-                .HasForeignKey(d => d.CustomerId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_PurchaseRequests_AppUsers");
-
-            // CreatedUser / UpdatedUser ánh xạ như cột scalar (int?). Ràng buộc khóa ngoại
-            // tới AppUsers đã được DB v2 đảm bảo; không cấu hình quan hệ EF để tránh xung đột model.
-        });
 
         OnModelCreatingPartial(modelBuilder);
     }

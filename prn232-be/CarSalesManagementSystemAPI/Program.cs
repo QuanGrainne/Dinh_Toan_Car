@@ -23,13 +23,9 @@ namespace CarSalesManagementSystemAPI
             builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<IMaintenancePackageRepository, MaintenancePackageRepository>();
             builder.Services.AddScoped<IMaintenancePackageService, MaintenancePackageService>();
-            builder.Services.AddScoped<IMaintenanceAppointmentRepository, MaintenanceAppointmentRepository>();
-            builder.Services.AddScoped<IMaintenanceAppointmentService, MaintenanceAppointmentService>();
             builder.Services.AddScoped<IServiceRepository, ServiceRepository>();
             builder.Services.AddScoped<IServiceService, ServiceService>();
-            builder.Services.AddScoped<ICustomerCarRepository, CustomerCarRepository>();
-            builder.Services.AddScoped<IAppointmentConsumedPartRepository, AppointmentConsumedPartRepository>();
-            builder.Services.AddScoped<IAppointmentConsumedPartService, AppointmentConsumedPartService>();
+
 
             // Car Showroom flow registrations
             builder.Services.AddScoped<ICarRepository, CarRepository>();
@@ -42,26 +38,10 @@ namespace CarSalesManagementSystemAPI
             builder.Services.AddScoped<IPartCategoryService, PartCategoryService>();
             builder.Services.AddScoped<IPartRepository, PartRepository>();
             builder.Services.AddScoped<IPartService, PartService>();
-            builder.Services.AddScoped<IPartOrderRepository, PartOrderRepository>();
-            builder.Services.AddScoped<IPartOrderService, PartOrderService>();
+
             
             // New parts logistics flow registrations
-            builder.Services.AddScoped<ISupplierRepository, SupplierRepository>();
-            builder.Services.AddScoped<ISupplierService, SupplierService>();
-            builder.Services.AddScoped<IPartCompatibilityRepository, PartCompatibilityRepository>();
-            builder.Services.AddScoped<IPartCompatibilityService, PartCompatibilityService>();
-            builder.Services.AddScoped<IInventoryRepository, InventoryRepository>();
-            builder.Services.AddScoped<IInventoryService, InventoryService>();
-            builder.Services.AddScoped<IInventoryReceiptService, InventoryReceiptService>();
-            // Car sales flow (yêu cầu mua xe)
-            builder.Services.AddScoped<ICarSalesRepository, CarSalesRepository>();
-            builder.Services.AddScoped<ICarSalesService, CarSalesService>();
 
-            // Hóa đơn tổng dùng chung: checkout (mua lẻ/gộp) + thanh toán đặt cọc/mua đứt cho cả 3 module
-            builder.Services.AddScoped<ICheckoutRepository, CheckoutRepository>();
-            builder.Services.AddScoped<ICheckoutService, CheckoutService>();
-            builder.Services.AddScoped<IMasterInvoicePaymentRepository, MasterInvoicePaymentRepository>();
-            builder.Services.AddScoped<IMasterInvoicePaymentService, MasterInvoicePaymentService>();
 
             // Chat proxy — delegates to Python RAG service (chatbot chỉ tư vấn, không tạo đơn)
             builder.Services.AddHttpClient<IChatProxyService, ChatProxyService>();
@@ -82,16 +62,7 @@ namespace CarSalesManagementSystemAPI
             var partCategories = modelBuilder.EntitySet<BusinessObjects.Models.PartCategory>("PartCategories");
             partCategories.EntityType.HasKey(pc => pc.CategoryId);
 
-            var partOrders = modelBuilder.EntitySet<BusinessObjects.Models.PartOrder>("PartOrders");
-            partOrders.EntityType.HasKey(po => po.OrderId);
 
-            // PurchaseRequest được phục vụ qua REST (/api/car-sales), nhưng vẫn khai báo khóa cho OData
-            // vì Car.PurchaseRequests là navigation — tránh mọi rủi ro khi dựng EDM.
-            var purchaseRequests = modelBuilder.EntitySet<BusinessObjects.Models.PurchaseRequest>("PurchaseRequests");
-            purchaseRequests.EntityType.HasKey(pr => pr.RequestId);
-
-            var odataSuppliers = modelBuilder.EntitySet<BusinessObjects.Models.Supplier>("Suppliers");
-            odataSuppliers.EntityType.HasKey(s => s.SupplierId);
 
             builder.Services.AddControllers(options =>
             {
@@ -169,65 +140,8 @@ namespace CarSalesManagementSystemAPI
                     // Module ô tô (đặt cọc/mua đứt) dùng MasterInvoices + CarInvoices + PurchaseRequests của v2,
                     // không còn tạo bảng DepositCaptchas hay cột deposit trên PurchaseRequests khi khởi động.
 
-                    // Check and apply custom delivery management schema adjustments
-                    try
-                    {
-                        System.Console.WriteLine("Checking delivery and payment schema columns in PartOrders...");
-                        context.Database.ExecuteSqlRaw(@"
-                            IF NOT EXISTS (SELECT * FROM sys.columns WHERE object_id = OBJECT_ID('PartOrders') AND name = 'DeliveryMethod')
-                            BEGIN
-                                ALTER TABLE PartOrders
-                                    ADD DeliveryMethod   NVARCHAR(50)   NOT NULL DEFAULT 'Pickup',
-                                        ShippingFee      DECIMAL(18,2)  NOT NULL DEFAULT 0;
-                            END
-                            IF NOT EXISTS (SELECT * FROM sys.columns WHERE object_id = OBJECT_ID('PartOrders') AND name = 'PaymentMethod')
-                            BEGIN
-                                ALTER TABLE PartOrders
-                                    ADD PaymentMethod NVARCHAR(50) NULL;
-                            END
-                        ");
-                        context.Database.ExecuteSqlRaw(@"
-                            ALTER TABLE PartOrders
-                                ALTER COLUMN ShippingAddress NVARCHAR(255) NULL;
-                        ");
-                        
-                        System.Console.WriteLine("Checking IsPaid column in MaintenanceAppointments...");
-                        context.Database.ExecuteSqlRaw(@"
-                            IF NOT EXISTS (SELECT * FROM sys.columns WHERE object_id = OBJECT_ID('MaintenanceAppointments') AND name = 'IsPaid')
-                            BEGIN
-                                ALTER TABLE MaintenanceAppointments
-                                    ADD IsPaid BIT NOT NULL DEFAULT 0;
-                            END
-                        ");
+                    System.Console.WriteLine("Schema is managed by dinh_toan_car.sql - no runtime ALTER needed.");
 
-                        // Cột phục vụ xác thực OTP / Reset mật khẩu trên AppUsers
-                        System.Console.WriteLine("Checking OTP verification columns on AppUsers...");
-                        context.Database.ExecuteSqlRaw(@"
-                            IF COL_LENGTH('AppUsers','VerificationCode') IS NULL
-                                ALTER TABLE AppUsers ADD VerificationCode NVARCHAR(100) NULL;
-                            IF COL_LENGTH('AppUsers','CodeExpiryTime') IS NULL
-                                ALTER TABLE AppUsers ADD CodeExpiryTime DATETIME NULL;
-                        ");
-
-                        // Cột dùng chung trên hóa đơn tổng (cả 3 module cần) — tự bổ sung nếu chưa chạy patch.
-                        System.Console.WriteLine("Checking shared columns on MasterInvoices...");
-                        context.Database.ExecuteSqlRaw(@"
-                            IF COL_LENGTH('MasterInvoices','InvoiceType') IS NULL
-                                ALTER TABLE MasterInvoices ADD InvoiceType VARCHAR(20) NOT NULL CONSTRAINT DF_MasterInvoices_InvoiceType DEFAULT 'Car';
-                            IF COL_LENGTH('MasterInvoices','PaymentMethod') IS NULL
-                                ALTER TABLE MasterInvoices ADD PaymentMethod NVARCHAR(50) NULL;
-                            IF COL_LENGTH('MasterInvoices','PaymentReference') IS NULL
-                                ALTER TABLE MasterInvoices ADD PaymentReference NVARCHAR(100) NULL;
-                            IF COL_LENGTH('MasterInvoices','PaidAt') IS NULL
-                                ALTER TABLE MasterInvoices ADD PaidAt DATETIME NULL;
-                        ");
-
-                        System.Console.WriteLine("Schema checks completed.");
-                    }
-                    catch (System.Exception ex)
-                    {
-                        System.Console.WriteLine($"[WARN] Schema sync skipped: {ex.InnerException?.Message ?? ex.Message}");
-                    }
                 }
                 catch (System.Exception ex)
                 {

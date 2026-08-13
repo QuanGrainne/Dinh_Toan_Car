@@ -13,7 +13,7 @@ namespace Services
         void UpdatePartMetadata(UpdatePartViewModel model, int? adminId);
         bool HasTransactions(int partId);
         void DeletePart(int partId);
-        IEnumerable<Part> GetPartsFiltered(int categoryId, int supplierId);
+        IEnumerable<Part> GetPartsFiltered(int categoryId);
     }
 }
 

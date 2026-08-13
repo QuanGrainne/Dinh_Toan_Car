@@ -23,6 +23,4 @@ public partial class Service
 
     // Navigation properties
     public virtual ICollection<PackageService> PackageServices { get; set; } = new List<PackageService>();
-    public virtual ICollection<AppointmentDetail> AppointmentDetails { get; set; } = new List<AppointmentDetail>();
-    public virtual ICollection<ServiceRequiredPart> ServiceRequiredParts { get; set; } = new List<ServiceRequiredPart>();
 }

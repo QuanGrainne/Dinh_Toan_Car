@@ -1,7 +1,7 @@
 @model CarSalesManagementSystemClient.Models.CarFormViewModel
 
 @{
-    ViewData["Title"] = "ThÃªm xe má»›i";
+    ViewData["Title"] = "Thêm xe mới";
 
     var brands =
         ViewBag.Brands
@@ -544,13 +544,13 @@
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">
                     <a asp-action="Index">
-                        Quáº£n lÃ½ xe
+                        Quản lý xe
                     </a>
                 </li>
 
                 <li class="breadcrumb-item active"
                     aria-current="page">
-                    ThÃªm xe má»›i
+                    Thêm xe mới
                 </li>
             </ol>
         </nav>
@@ -564,12 +564,12 @@
 
                 <h1 class="car-create-title">
                     <i class="bi bi-car-front-fill"></i>
-                    ThÃªm xe má»›i
+                    Thêm xe mới
                 </h1>
 
                 <p class="car-create-description">
-                    Nháº­p Ä‘áº§y Ä‘á»§ thÃ´ng tin cÆ¡ báº£n, thÃ´ng sá»‘ váº­n hÃ nh, giÃ¡ bÃ¡n
-                    vÃ  tráº¡ng thÃ¡i Ä‘á»ƒ Ä‘Æ°a xe vÃ o há»‡ thá»‘ng quáº£n lÃ½ showroom.
+                    Nhập đầy đủ thông tin cơ bản, thông số vận hành, giá bán
+                    và trạng thái để đưa xe vào hệ thống quản lý showroom.
                 </p>
             </div>
 
@@ -582,16 +582,16 @@
         <section class="car-create-card">
             <div class="car-create-card-header">
                 <div>
-                    <h2>ThÃ´ng tin xe</h2>
+                    <h2>Thông tin xe</h2>
 
                     <p>
-                        CÃ¡c trÆ°á»ng cÃ³ dáº¥u sao lÃ  thÃ´ng tin báº¯t buá»™c trÆ°á»›c khi lÆ°u.
+                        Các trường có dấu sao là thông tin bắt buộc trước khi lưu.
                     </p>
                 </div>
 
                 <span class="car-create-required-note">
                     <i class="bi bi-asterisk"></i>
-                    TrÆ°á»ng báº¯t buá»™c
+                    Trường bắt buộc
                 </span>
             </div>
 
@@ -619,10 +619,10 @@
                             </div>
 
                             <div>
-                                <h3>ThÃ´ng tin cÆ¡ báº£n</h3>
+                                <h3>Thông tin cơ bản</h3>
 
                                 <p>
-                                    TÃªn xe, thÆ°Æ¡ng hiá»‡u, model, nÄƒm sáº£n xuáº¥t vÃ  mÃ u sáº¯c.
+                                    Tên xe, thương hiệu, model, năm sản xuất và màu sắc.
                                 </p>
                             </div>
                         </div>
@@ -631,7 +631,7 @@
                             <div class="col-md-8">
                                 <label asp-for="CarName"
                                        class="car-form-label car-form-label-required">
-                                    TÃªn xe
+                                    Tên xe
                                 </label>
 
                                 <div class="car-input-wrapper">
@@ -647,7 +647,7 @@
                             <div class="col-md-4">
                                 <label asp-for="BrandId"
                                        class="car-form-label car-form-label-required">
-                                    ThÆ°Æ¡ng hiá»‡u
+                                    Thương hiệu
                                 </label>
 
                                 <div class="car-input-wrapper">
@@ -657,7 +657,7 @@
                                             class="car-form-select"
                                             required>
                                         <option value="">
-                                            -- Chá»n hÃ£ng --
+                                            -- Chọn hãng --
                                         </option>
 
                                         @foreach (var b in brands)
@@ -688,7 +688,7 @@
                             <div class="col-md-4">
                                 <label asp-for="Year"
                                        class="car-form-label car-form-label-required">
-                                    NÄƒm sáº£n xuáº¥t
+                                    Năm sản xuất
                                 </label>
 
                                 <div class="car-input-wrapper">
@@ -706,7 +706,7 @@
                             <div class="col-md-4">
                                 <label asp-for="Color"
                                        class="car-form-label">
-                                    MÃ u sáº¯c
+                                    Màu sắc
                                 </label>
 
                                 <div class="car-input-wrapper">
@@ -714,7 +714,7 @@
 
                                     <input asp-for="Color"
                                            class="car-form-control"
-                                           placeholder="VD: Tráº¯ng ngá»c trai" />
+                                           placeholder="VD: Trắng ngọc trai" />
                                 </div>
                             </div>
                         </div>
@@ -728,10 +728,10 @@
                             </div>
 
                             <div>
-                                <h3>ThÃ´ng sá»‘ váº­n hÃ nh</h3>
+                                <h3>Thông số vận hành</h3>
 
                                 <p>
-                                    Loáº¡i nhiÃªn liá»‡u, há»™p sá»‘ vÃ  sá»‘ kilomet Ä‘Ã£ sá»­ dá»¥ng.
+                                    Loại nhiên liệu, hộp số và số kilomet đã sử dụng.
                                 </p>
                             </div>
                         </div>
@@ -740,7 +740,7 @@
                             <div class="col-md-4">
                                 <label asp-for="FuelType"
                                        class="car-form-label car-form-label-required">
-                                    NhiÃªn liá»‡u
+                                    Nhiên liệu
                                 </label>
 
                                 <div class="car-input-wrapper">
@@ -750,15 +750,15 @@
                                             class="car-form-select"
                                             required>
                                         <option value="Gasoline">
-                                            XÄƒng
+                                            Xăng
                                         </option>
 
                                         <option value="Diesel">
-                                            Dáº§u diesel
+                                            Dầu diesel
                                         </option>
 
                                         <option value="Electric">
-                                            Äiá»‡n
+                                            Điện
                                         </option>
 
                                         <option value="Hybrid">
@@ -771,7 +771,7 @@
                             <div class="col-md-4">
                                 <label asp-for="Transmission"
                                        class="car-form-label car-form-label-required">
-                                    Há»™p sá»‘
+                                    Hộp số
                                 </label>
 
                                 <div class="car-input-wrapper">
@@ -781,11 +781,11 @@
                                             class="car-form-select"
                                             required>
                                         <option value="Automatic">
-                                            Tá»± Ä‘á»™ng
+                                            Tự động
                                         </option>
 
                                         <option value="Manual">
-                                            Sá»‘ sÃ n
+                                            Số sàn
                                         </option>
 
                                         <option value="CVT">
@@ -798,7 +798,7 @@
                             <div class="col-md-4">
                                 <label asp-for="Mileage"
                                        class="car-form-label car-form-label-required">
-                                    Sá»‘ km Ä‘Ã£ Ä‘i
+                                    Số km đã đi
                                 </label>
 
                                 <div class="car-input-wrapper">
@@ -822,10 +822,10 @@
                             </div>
 
                             <div>
-                                <h3>ThÃ´ng tin kinh doanh</h3>
+                                <h3>Thông tin kinh doanh</h3>
 
                                 <p>
-                                    GiÃ¡ bÃ¡n, tráº¡ng thÃ¡i hiá»ƒn thá»‹, hÃ¬nh áº£nh vÃ  mÃ´ táº£ xe.
+                                    Giá bán, trạng thái hiển thị, hình ảnh và mô tả xe.
                                 </p>
                             </div>
                         </div>
@@ -834,7 +834,7 @@
                             <div class="col-md-6">
                                 <label asp-for="Price"
                                        class="car-form-label car-form-label-required">
-                                    GiÃ¡ bÃ¡n (VNÄ)
+                                    Giá bán (VNĐ)
                                 </label>
 
                                 <div class="car-input-wrapper">
@@ -849,14 +849,14 @@
                                 </div>
 
                                 <span class="car-form-help">
-                                    GiÃ¡ Ä‘Æ°á»£c nháº­p theo Ä‘Æ¡n vá»‹ Viá»‡t Nam Ä‘á»“ng.
+                                    Giá được nhập theo đơn vị Việt Nam đồng.
                                 </span>
                             </div>
 
                             <div class="col-md-6">
                                 <label asp-for="Status"
                                        class="car-form-label car-form-label-required">
-                                    Tráº¡ng thÃ¡i
+                                    Trạng thái
                                 </label>
 
                                 <div class="car-input-wrapper">
@@ -866,19 +866,19 @@
                                             class="car-form-select"
                                             required>
                                         <option value="Available">
-                                            CÃ³ sáºµn
+                                            Có sẵn
                                         </option>
 
                                         <option value="Reserved">
-                                            Äang Ä‘áº·t cá»c
+                                            Đang đặt cọc
                                         </option>
 
                                         <option value="Sold">
-                                            ÄÃ£ bÃ¡n
+                                            Đã bán
                                         </option>
 
                                         <option value="Inactive">
-                                            áº¨n
+                                            Ẩn
                                         </option>
                                     </select>
                                 </div>
@@ -886,7 +886,7 @@
 
                             <div class="col-12">
                                 <label class="car-form-label">
-                                    áº¢nh chÃ­nh (Táº£i lÃªn tá»« mÃ¡y tÃ­nh)
+                                    Ảnh chính (Tải lên từ máy tính)
                                 </label>
                                 <div class="car-input-wrapper">
                                     <i class="bi bi-upload car-input-icon"></i>
@@ -904,7 +904,7 @@
 
                             <div class="col-12">
                                 <label class="car-form-label">
-                                    CÃ¡c áº£nh phá»¥ (Chá»n nhiá»u áº£nh tá»« mÃ¡y tÃ­nh)
+                                    Các ảnh phụ (Chọn nhiều ảnh từ máy tính)
                                 </label>
                                 <div class="car-input-wrapper">
                                     <i class="bi bi-images car-input-icon"></i>
@@ -933,13 +933,13 @@
                             <div class="col-12">
                                 <label asp-for="Description"
                                        class="car-form-label">
-                                    MÃ´ táº£
+                                    Mô tả
                                 </label>
 
                                 <textarea asp-for="Description"
                                           class="car-form-textarea"
                                           rows="3"
-                                          placeholder="MÃ´ táº£ chi tiáº¿t vá» xe..."></textarea>
+                                          placeholder="Mô tả chi tiết về xe..."></textarea>
                             </div>
                         </div>
                     </section>
@@ -949,13 +949,13 @@
                         <a asp-action="Index"
                            class="car-create-button car-create-button-cancel">
                             <i class="bi bi-x-lg"></i>
-                            Há»§y
+                            Hủy
                         </a>
 
                         <button type="submit"
                                 class="car-create-button car-create-button-submit">
                             <i class="bi bi-plus-circle-fill"></i>
-                            ThÃªm xe
+                            Thêm xe
                         </button>
                     </div>
                 </form>
@@ -1020,7 +1020,7 @@
             renderAdditionalImages();
         }
 
-        // Khởi tạo ban đầu
+        // Kh?i t?o ban d?u
         renderAdditionalImages();
 
         document.getElementById("mainImageUpload").addEventListener("change", function () {
@@ -1030,7 +1030,7 @@
             formData.append("files", files[0]);
             var statusEl = document.getElementById("mainImageStatus");
             statusEl.style.display = "block";
-            statusEl.innerText = "Đang tải ảnh...";
+            statusEl.innerText = "�ang t?i ?nh...";
 
             fetch("/Admin/Cars/UploadImages", {
                 method: "POST",
@@ -1041,13 +1041,13 @@
                     document.getElementById("hiddenImageUrl").value = newUrl;
                     document.getElementById("mainImagePreview").src = newUrl;
                     document.getElementById("mainImagePreviewContainer").style.display = "inline-block";
-                    statusEl.innerText = "Tải ảnh chính thành công!";
+                    statusEl.innerText = "T?i ?nh ch�nh th�nh c�ng!";
                 } else {
-                    statusEl.innerText = "Lỗi: " + data.message;
+                    statusEl.innerText = "L?i: " + data.message;
                     statusEl.classList.replace("text-success", "text-danger");
                 }
             }).catch(err => {
-                statusEl.innerText = "Lỗi kết nối!";
+                statusEl.innerText = "L?i k?t n?i!";
                 statusEl.classList.replace("text-success", "text-danger");
             });
         });
@@ -1061,7 +1061,7 @@
             }
             var statusEl = document.getElementById("additionalImagesStatus");
             statusEl.style.display = "block";
-            statusEl.innerText = "Đang tải ảnh...";
+            statusEl.innerText = "�ang t?i ?nh...";
 
             fetch("/Admin/Cars/UploadImages", {
                 method: "POST",
@@ -1073,13 +1073,13 @@
                     var newUrls = currentUrls.concat(data.imageUrls);
                     document.getElementById("hiddenAdditionalImages").value = newUrls.join(',');
                     renderAdditionalImages();
-                    statusEl.innerText = "Tải " + data.imageUrls.length + " ảnh phụ thành công!";
+                    statusEl.innerText = "T?i " + data.imageUrls.length + " ?nh ph? th�nh c�ng!";
                 } else {
-                    statusEl.innerText = "Lỗi: " + data.message;
+                    statusEl.innerText = "L?i: " + data.message;
                     statusEl.classList.replace("text-success", "text-danger");
                 }
             }).catch(err => {
-                statusEl.innerText = "Lỗi kết nối!";
+                statusEl.innerText = "L?i k?t n?i!";
                 statusEl.classList.replace("text-success", "text-danger");
             });
         });

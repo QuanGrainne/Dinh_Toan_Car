@@ -17,7 +17,6 @@ namespace CarSalesManagementSystemClient.Controllers
     {
         private readonly HttpClient _httpClient;
         private readonly string _apiBaseUrl;
-        private string CaptchasApiUrl => $"{_apiBaseUrl}/odata/DepositCaptchas";
         private string CarsApiUrl => $"{_apiBaseUrl}/odata/Cars";
         private string BrandsApiUrl => $"{_apiBaseUrl}/odata/CarBrands";
 
@@ -246,75 +245,6 @@ namespace CarSalesManagementSystemClient.Controllers
             }
 
             return RedirectToAction(nameof(Cars));
-        }
-
-        // ??? Captcha Management ??????????????????????????????????????????????
-
-        public async Task<IActionResult> Captchas()
-        {
-            if (!AttachJwtToken())
-            {
-                TempData["ErrorMessage"] = "Phi?n dang nh?p kh?ng c? token ho?c d? h?t h?n. Vui l?ng dang nh?p l?i.";
-                ViewBag.Cars = new List<CarViewModel>();
-                return View(new List<DepositCaptchaViewModel>());
-            }
-
-            try
-            {
-                var captchaRequestUri = $"{CaptchasApiUrl}?$expand=Car&$orderby=CreatedAt desc";
-                var captchaResponse = await _httpClient.GetFromJsonAsync<ODataResponse<DepositCaptchaViewModel>>(captchaRequestUri);
-                var captchas = captchaResponse?.Value ?? new List<DepositCaptchaViewModel>();
-
-                var carsRequestUri = $"{CarsApiUrl}?$filter=Status eq 'Available' or Status eq 'Reserved'";
-                var carsResponse = await _httpClient.GetFromJsonAsync<ODataResponse<CarViewModel>>(carsRequestUri);
-                var cars = carsResponse?.Value ?? new List<CarViewModel>();
-
-                ViewBag.Cars = cars;
-                return View(captchas);
-            }
-            catch (System.Net.Http.HttpRequestException ex) when (ex.StatusCode == System.Net.HttpStatusCode.Unauthorized)
-            {
-                TempData["ErrorMessage"] = "Token x?c th?c d? h?t h?n ho?c kh?ng h?p l?. Vui l?ng dang nh?p l?i.";
-                ViewBag.Cars = new List<CarViewModel>();
-                return View(new List<DepositCaptchaViewModel>());
-            }
-            catch (Exception ex)
-            {
-                TempData["ErrorMessage"] = "Kh?ng th? t?i danh s?ch Captcha: " + ex.Message;
-                ViewBag.Cars = new List<CarViewModel>();
-                return View(new List<DepositCaptchaViewModel>());
-            }
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> GenerateCaptcha(int carId, string? code)
-        {
-            try
-            {
-                AttachJwtToken();
-                var payload = new { CarId = carId, Code = code };
-                var response = await _httpClient.PostAsJsonAsync($"{CaptchasApiUrl}/generate", payload);
-
-                var responseContent = await response.Content.ReadAsStringAsync();
-                var jsonDoc = JsonDocument.Parse(responseContent);
-
-                if (response.IsSuccessStatusCode)
-                {
-                    var msg = jsonDoc.RootElement.TryGetProperty("message", out var msgProp) ? msgProp.GetString() : "T?o m? th?nh c?ng.";
-                    TempData["SuccessMessage"] = msg;
-                }
-                else
-                {
-                    var errorMsg = jsonDoc.RootElement.TryGetProperty("message", out var msgProp) ? msgProp.GetString() : "L?i kh?ng x?c d?nh.";
-                    TempData["ErrorMessage"] = errorMsg;
-                }
-            }
-            catch (Exception ex)
-            {
-                TempData["ErrorMessage"] = "C? l?i x?y ra: " + ex.Message;
-            }
-
-            return RedirectToAction(nameof(Captchas));
         }
 
         // ??? Helpers ?????????????????????????????????????????????????????????

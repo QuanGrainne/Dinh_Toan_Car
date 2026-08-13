@@ -56,36 +56,6 @@ public class PagedResultViewModel<T>
     public bool HasNextPage { get; set; }
 }
 
-public class PurchaseRequestHistoryViewModel
-{
-    public int RequestId { get; set; }
-    public int CarId { get; set; }
-    public int CustomerId { get; set; }
-    public string CustomerName { get; set; } = null!;
-    public string CustomerPhone { get; set; } = null!;
-    public string? CustomerEmail { get; set; }
-    public string? Message { get; set; }
-    public string Status { get; set; } = null!;
-    public DateTime CreatedAt { get; set; }
-    public DateTime? UpdatedAt { get; set; }
-    public decimal? DepositAmount { get; set; }
-    public DateTime? DepositDate { get; set; }
-    public DateTime? DepositExpiry { get; set; }
-    public string? CaptchaCode { get; set; }
-    public CarViewModel Car { get; set; } = null!;
-}
-
-public class DepositCaptchaViewModel
-{
-    public int CaptchaId { get; set; }
-    public string Code { get; set; } = null!;
-    public int CarId { get; set; }
-    public bool IsUsed { get; set; }
-    public DateTime CreatedAt { get; set; }
-    public DateTime? UsedAt { get; set; }
-    public CarViewModel Car { get; set; } = null!;
-}
-
 public class CarFormViewModel
 {
     public int CarId { get; set; }

@@ -23,7 +23,6 @@ public partial class MaintenancePackage
 
     // Navigation properties
     public virtual ICollection<PackageService> PackageServices { get; set; } = new List<PackageService>();
-    public virtual ICollection<AppointmentDetail> AppointmentDetails { get; set; } = new List<AppointmentDetail>();
 
     public int TotalDurationMinutes => PackageServices?.Sum(ps => ps.Service?.EstimatedDurationMinutes ?? 0) ?? 0;
 }

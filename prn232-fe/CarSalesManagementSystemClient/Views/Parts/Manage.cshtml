@@ -1,4 +1,4 @@
-﻿@model IEnumerable<CarSalesManagementSystemClient.Models.PartViewModel>
+@model IEnumerable<CarSalesManagementSystemClient.Models.PartViewModel>
 @{
     Layout = "_AdminLayout";
     ViewData["Title"] = "Quan ly Phu tung - Admin";
@@ -226,8 +226,11 @@
                                         <td><strong>@cat.CategoryName</strong></td>
                                         <td class="text-muted">@(string.IsNullOrWhiteSpace(cat.Description) ? "-" : cat.Description)</td>
                                         <td class="text-end pe-4">
-                                            <button class="btn-edit" onclick="openEditCategoryModal(@cat.CategoryId, '@cat.CategoryName', '@cat.Description')">
+                                            <button class="btn-edit me-1" onclick="openEditCategoryModal(@cat.CategoryId, '@cat.CategoryName', '@cat.Description')">
                                                 <i class="bi bi-pencil-square"></i> Sua
+                                            </button>
+                                            <button class="btn-del" onclick="deleteCategory(@cat.CategoryId, '@cat.CategoryName')">
+                                                <i class="bi bi-trash"></i> Xoa
                                             </button>
                                         </td>
                                     </tr>
@@ -527,6 +530,27 @@
             document.getElementById('catDesc').value = desc || '';
             document.getElementById('catModalTitle').textContent = 'Chinh sua danh muc';
             new bootstrap.Modal(document.getElementById('categoryModal')).show();
+        }
+
+        function deleteCategory(id, name) {
+            Swal.fire({
+                title: 'Xac nhan xoa?',
+                html: `Ban chac chan muon xoa danh muc <b>${name}</b>?<br><small class="text-danger">Cac phu tung thuoc danh muc nay co the bi anh huong!</small>`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Xoa ngay',
+                cancelButtonText: 'Huy',
+                confirmButtonColor: '#dc3545'
+            }).then(r => {
+                if (!r.isConfirmed) return;
+                fetch(`/Parts/DeleteCategory/${id}`, { method: 'POST' })
+                    .then(r => r.json())
+                    .then(res => {
+                        if (res.success) Swal.fire('Thanh cong!', res.message, 'success').then(() => location.reload());
+                        else Swal.fire('Loi!', res.message || 'Khong the xoa danh muc.', 'error');
+                    })
+                    .catch(() => Swal.fire('Loi', 'Loi ket noi may chu.', 'error'));
+            });
         }
 
         function saveCategoryForm(e) {

@@ -32,7 +32,6 @@ namespace DataAccessObjects
         {
             using var context = new CarShowroomContext();
             return context.Services
-                .Include(s => s.ServiceRequiredParts).ThenInclude(sr => sr.Part)
                 .ToList();
         }
 
@@ -40,7 +39,6 @@ namespace DataAccessObjects
         {
             using var context = new CarShowroomContext();
             return context.Services
-                .Include(s => s.ServiceRequiredParts).ThenInclude(sr => sr.Part)
                 .Where(s => s.Status == "Available")
                 .ToList();
         }
@@ -49,7 +47,6 @@ namespace DataAccessObjects
         {
             using var context = new CarShowroomContext();
             return context.Services
-                .Include(s => s.ServiceRequiredParts).ThenInclude(sr => sr.Part)
                 .SingleOrDefault(s => s.ServiceId == serviceId);
         }
 

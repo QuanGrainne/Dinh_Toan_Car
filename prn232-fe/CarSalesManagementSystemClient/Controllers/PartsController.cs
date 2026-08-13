@@ -225,10 +225,6 @@ namespace CarSalesManagementSystemClient.Controllers
                     CategoryId = model.CategoryId,
                     Brand = model.Brand?.Trim(),
                     Price = model.Price,
-                    Quantity = 100,
-                    MinStockLevel = 5,
-                    MaxStockLevel = 500,
-                    UnitOfMeasure = "Cai",
                     Description = model.Description?.Trim(),
                     ImageUrl = model.ImageUrl?.Trim(),
                     Status = "Available"
@@ -315,6 +311,27 @@ namespace CarSalesManagementSystemClient.Controllers
             catch (Exception ex)
             {
                 return StatusCode(500, new { message = "Loi ket noi: " + ex.Message });
+            }
+        }
+
+        // POST: Parts/DeleteCategory/5
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> DeleteCategory(int id)
+        {
+            try
+            {
+                AppendAuthorizationHeader();
+                var response = await _httpClient.DeleteAsync($"http://localhost:5084/api/PartCategories/{id}");
+                if (response.IsSuccessStatusCode)
+                    return Json(new { success = true, message = "Xoa danh muc thanh cong." });
+
+                var errMsg = await ExtractErrorMessageAsync(response, "Xoa danh muc that bai.");
+                return Json(new { success = false, message = errMsg });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "Loi ket noi: " + ex.Message });
             }
         }
 

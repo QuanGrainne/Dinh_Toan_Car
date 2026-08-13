@@ -1149,7 +1149,7 @@
 
                         @if (User.IsInRole("Admin"))
                         {
-                            <li class="nav-item dropdown site-nav-item @(ctrl == "MaintenancePackages" || ctrl == "MaintenanceAppointments" || ctrl == "Services" ? "active" : "")">
+                            <li class="nav-item dropdown site-nav-item @(ctrl == "MaintenancePackages" || ctrl == "Services" ? "active" : "")">
                                 <a class="nav-link dropdown-toggle site-nav-link"
                                    href="#"
                                    id="navbarAdminMaintenanceDropdown"
@@ -1162,12 +1162,6 @@
 
                                 <ul class="dropdown-menu site-nav-dropdown"
                                     aria-labelledby="navbarAdminMaintenanceDropdown">
-                                    <li>
-                                        <a class="dropdown-item"
-                                           href="/Admin/MaintenanceAppointments">
-                                            Lịch hẹn
-                                        </a>
-                                    </li>
 
                                     <li>
                                         <a class="dropdown-item"
