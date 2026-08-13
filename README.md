@@ -1,10 +1,10 @@
-# 🚗 ĐỊNH TOÀN AUTO - CAR SHOWROOM MANAGEMENT SYSTEM
-> **Dự án Môn học PRN232** | Hệ thống Quản lý Showroom Ô tô, Phụ tùng và Gói Dịch vụ Bảo dưỡng
+# 🚗 Đinh Toản AUTO - CAR SHOWROOM MANAGEMENT SYSTEM
+>| Hệ thống Quản lý Showroom Ô tô, Phụ tùng và Gói Dịch vụ Bảo dưỡng
 
 ---
 
 ## 📌 Giới thiệu Tổng quan
-**Định Toàn Auto** là hệ thống quản lý và giới thiệu xe ô tô hiện đại, hỗ trợ khách hàng tra cứu xe, phụ tùng, bảng giá dịch vụ bảo dưỡng, đồng thời cung cấp giao diện quản trị (Admin Dashboard) mạnh mẽ để quản lý toàn bộ danh mục sản phẩm của showroom.
+**Đinh Toản Auto** là hệ thống quản lý và giới thiệu xe ô tô hiện đại, hỗ trợ khách hàng tra cứu xe, phụ tùng, bảng giá dịch vụ bảo dưỡng, đồng thời cung cấp giao diện quản trị (Admin Dashboard) mạnh mẽ để quản lý toàn bộ danh mục sản phẩm của showroom.
 
 ---
 
